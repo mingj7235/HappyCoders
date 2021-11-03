@@ -1,16 +1,33 @@
 package com.happycoders.account;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 
 @Controller
+@RequiredArgsConstructor
 public class AccountController {
+
+    private final SignUpFormValidator signUpFormValidator;
+
+    /**
+     * InitBinder : form의 객체를 받을 때, 바인더를 사용해서 validator를 가동시킬 수 있다.
+     * @InitBinder의 ("signUpForm") 은 SignUpForm 객체의 이름을 캐멀케이스화한 것과 매핑이되는 것이다.
+     * signUpForm을 받을 때, 해당 validator 즉, signUpFormValidator를 추가했으므로 검증한다.
+     */
+    @InitBinder ("signUpForm")
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(signUpFormValidator);
+    }
 
     @GetMapping ("/sign-up")
     public String signUpForm (Model model) {
@@ -24,6 +41,8 @@ public class AccountController {
         if (errors.hasErrors()) {
             return "account/sign-up";
         }
+
+        signUpFormValidator.validate(signUpForm, errors);
 
         //TODO 회원 가입 처리 -> 리다이렉트로 루트로 돌림
         return "redirect:/";
