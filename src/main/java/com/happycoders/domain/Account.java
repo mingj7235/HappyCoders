@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode (of = "id") // entity 들이 순환참조할때 stack over flow가 생길 수 있으므로 EqualsAndHashCode는 id만 사용함
@@ -56,4 +57,10 @@ public class Account {
     private boolean studyUpdatedByEmail;
 
     private boolean studyUpdatedByWeb;
+
+    public void generateEmailCheckToken() {
+        //email token을 UUID로 random하게 한다.
+        this.emailCheckToken = UUID.randomUUID().toString();
+    }
+
 }
