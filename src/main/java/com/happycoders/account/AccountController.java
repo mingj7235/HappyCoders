@@ -69,6 +69,6 @@ public class AccountController {
 
         //TODO 회원 가입 처리 -> 리다이렉트로 루트로 돌림
         return "redirect:/";
-
     }
+
 }
