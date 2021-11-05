@@ -67,7 +67,6 @@ public class AccountController {
                             "&email=" + newAccount.getEmail()); //메일 본문
         javaMailSender.send(mailMessage);
 
-        //TODO 회원 가입 처리 -> 리다이렉트로 루트로 돌림
         return "redirect:/";
     }
 

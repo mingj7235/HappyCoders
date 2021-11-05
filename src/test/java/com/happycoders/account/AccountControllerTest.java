@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -25,7 +26,19 @@ class AccountControllerTest {
                 .andExpect(status().isOk()) //응답이 200인지
                 .andExpect(view().name("account/sign-up")) //view 이름이 account/sign-up인지 확인
                 .andExpect(model().attributeExists("signUpForm")); // attribute의 이름이 있는지를 확인하는 테스트
-
-
     }
+
+    @DisplayName("회원 가입 처리 - 입력값 오류")
+    @Test
+    void signUpSubmit_with_wrong_input() throws Exception {
+        mockMvc.perform(post("/sign-up")
+                .param("nickname", "keesun")
+                .param("email", "email..") //email valicdation 오류
+                .param("password", "123456") // password validation 오류
+                        .with(csrf()) //csrf를 넣어줘야 제대로된 테스트가 진행된다.
+        )
+                .andExpect(status().isOk()) //200을 기대했으나, csrf token때문에 403 오류가 뜨게된다.
+                .andExpect(view().name("account/sign-up"));
+    }
+
 }
