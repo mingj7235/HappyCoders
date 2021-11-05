@@ -21,8 +21,8 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
-    private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+
+    private final AccountService accountService;
 
     /**
      * InitBinder : form의 객체를 받을 때, 바인더를 사용해서 validator를 가동시킬 수 있다.
@@ -47,27 +47,10 @@ public class AccountController {
             return "account/sign-up";
         }
 
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(signUpForm.getPassword()) //TODO encoding 해야한다.
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyCreatedByWeb(true)
-                .build();
-
-        Account newAccount = accountRepository.save(account);
-
-        newAccount.generateEmailCheckToken();
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("해피코더스, 회원 가입 인증"); //메일 제목
-        mailMessage.setText("/check-email-token?token="+ newAccount.getEmailCheckToken() +
-                            "&email=" + newAccount.getEmail()); //메일 본문
-        javaMailSender.send(mailMessage);
-
+        accountService.processNewAccount(signUpForm);
         return "redirect:/";
     }
+
+
 
 }
