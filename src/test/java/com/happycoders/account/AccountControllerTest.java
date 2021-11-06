@@ -72,6 +72,7 @@ class AccountControllerTest {
 
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "23TTkk#213"); //password가 인코딩되었으므로 not equal 이어야한다.
+        assertNotNull(account.getEmailCheckToken()); //token이 트랜잭션으로 잘 들어가서 생성되었는지 확인
         assertTrue(accountRepository.existsByEmail("test@naver.com"));
         then(javaMailSender).should().send(any(SimpleMailMessage.class)); //send가 호출되었는지 테스트
     }
