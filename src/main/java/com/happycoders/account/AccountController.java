@@ -68,9 +68,8 @@ public class AccountController {
             model.addAttribute("error", "wrong.token");
             return view;
         }
+        account.completeSignUp(); // refactor
 
-        account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now());
         model.addAttribute("numberOfUser", accountRepository.count()); // 몇번째 유저인지
         model.addAttribute("nickname", account.getNickname());
         return view;
