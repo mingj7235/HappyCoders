@@ -50,7 +50,8 @@ public class AccountController {
             return "account/sign-up";
         }
 
-        accountService.processNewAccount(signUpForm);
+        Account account = accountService.processNewAccount(signUpForm);
+        accountService.login(account);
         return "redirect:/";
     }
 
@@ -73,7 +74,7 @@ public class AccountController {
             return view;
         }
         account.completeSignUp(); // refactor
-
+        accountService.login(account);
         // view에 전달
         model.addAttribute("numberOfUser", accountRepository.count()); // 몇번째 유저인지
         model.addAttribute("nickname", account.getNickname());

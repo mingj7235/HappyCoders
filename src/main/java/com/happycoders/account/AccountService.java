@@ -4,9 +4,17 @@ import com.happycoders.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -23,10 +31,12 @@ public class AccountService {
      * 그렇게된다면 newAccount 객체는 계속 persist 객체가 되고, DB와 계속 싱크가 되어준다.
      */
     @Transactional
-    public void processNewAccount (SignUpForm signUpForm) {
+    public Account processNewAccount (SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
         sendSignUpConfirmEmail(newAccount);
+
+        return newAccount;
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
@@ -49,6 +59,27 @@ public class AccountService {
         mailMessage.setText("/check-email-token?token="+ newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail()); //메일 본문
         javaMailSender.send(mailMessage);
+    }
+
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                account.getNickname(),
+                account.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))); //정석적으로 사용하는 방법은 아니지만 이렇게 사용하는게 간편하기도함
+                // 왜이렇게 진행하는가? password를 인코딩된 것만 접근 가능하기때문에 (plain password에 접근할 수 없다.)
+                // 정석적인 방법을 하려면 plain password 를 알아야한다.
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(token);
+
+        //정석적인 방법
+//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+//                username, password //form에서 넘어온 username과 plain password를 사용하여 객체 생성
+//        );
+//        Authentication authenticate = authenticationManager.authenticate(token);
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        context.setAuthentication(authenticate);
+
+
     }
 
 }

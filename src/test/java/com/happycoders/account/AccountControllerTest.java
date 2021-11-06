@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,7 +44,8 @@ class AccountControllerTest {
         )
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("error"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(unauthenticated()); // 인증이 되어있는 사용자인지 아닌지를 테스트를 통해 확인가능. (이것은 Spring Security가 붙어있는 mockMvc에서 지원해준다.)
     }
 
     @DisplayName("인증 메일 확인 - 입력값 정상")
@@ -65,7 +68,8 @@ class AccountControllerTest {
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(authenticated().withUsername("testnick")); //인증이 되었는지 확인함
     }
 
     @DisplayName("회원 가입 화면 보이는지 테스트")
@@ -75,7 +79,8 @@ class AccountControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk()) //응답이 200인지
                 .andExpect(view().name("account/sign-up")) //view 이름이 account/sign-up인지 확인
-                .andExpect(model().attributeExists("signUpForm")); // attribute의 이름이 있는지를 확인하는 테스트
+                .andExpect(model().attributeExists("signUpForm")) // attribute의 이름이 있는지를 확인하는 테스트
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원 가입 처리 - 입력값 오류")
@@ -89,7 +94,8 @@ class AccountControllerTest {
         )
                 .andDo(print())
                 .andExpect(status().isOk()) //200을 기대했으나, csrf token때문에 403 오류가 뜨게된다.
-                .andExpect(view().name("account/sign-up")); // 입력값이 오류이므로 view는 그대로 머물러 있다.
+                .andExpect(view().name("account/sign-up")) // 입력값이 오류이므로 view는 그대로 머물러 있다.
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원 가입 처리 - 입력값 정상")
@@ -103,7 +109,8 @@ class AccountControllerTest {
         )
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+                .andExpect(view().name("redirect:/"))
+                .andExpect(authenticated().withUsername("minjae"));
 
         Account account = accountRepository.findByEmail("test@naver.com");
 
