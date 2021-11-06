@@ -59,17 +59,22 @@ public class AccountController {
 
         Account account = accountRepository.findByEmail(email);
         String view = "account/checked-email";
+
+        // account 가 제대로 저장되지 않았을 경우
         if(account == null) {
             model.addAttribute("error", "wrong.email");
             return view;
         }
 
-        if (!account.getEmailCheckToken().equals(token)) {
+        // account의 토큰이 맞지 않을 경우
+//        if (!account.getEmailCheckToken().equals(token)) { //refactor
+        if (!account.isValidToken(token)) {
             model.addAttribute("error", "wrong.token");
             return view;
         }
         account.completeSignUp(); // refactor
 
+        // view에 전달
         model.addAttribute("numberOfUser", accountRepository.count()); // 몇번째 유저인지
         model.addAttribute("nickname", account.getNickname());
         return view;
