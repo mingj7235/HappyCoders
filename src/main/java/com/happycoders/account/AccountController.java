@@ -81,6 +81,17 @@ public class AccountController {
         return view;
     }
 
+    /**
+     * TODO
+     * 1. 이메일을 확인하세요 메세지 페이지 (회원의 이름도 넣어야함)
+     * 2. 이메일 재전송 버튼 -> 회원의 이메일로 인증메일을 다시 보내는 기능
+     */
+    @GetMapping ("/check-email")
+    public String checkEmail () {
+
+        return "/account/check-email";
+    }
+
 
 
 }
