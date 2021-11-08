@@ -21,6 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll() // profile 요청은 Get 요청만 모두에게 열려있음
                 .anyRequest().authenticated(); //나머지요청은 로그인을 해야지 볼수있다.
 
+        http.formLogin()
+                .loginPage("/login").permitAll(); //loginPage custom config
+
+        http.logout()
+                .logoutSuccessUrl("/"); //logout 성공시 home으로 보내기
+
     }
 
     @Override
