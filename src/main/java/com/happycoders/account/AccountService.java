@@ -87,7 +87,7 @@ public class AccountService implements UserDetailsService {
     public UserDetails loadUserByUsername(String emailOrNickName) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickName);
         if (account == null) {
-            account = accountRepository.findByNickName(emailOrNickName);
+            account = accountRepository.findByNickname(emailOrNickName);
         }
 
         if (account == null) {
