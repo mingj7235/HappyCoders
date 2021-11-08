@@ -81,15 +81,22 @@ public class AccountController {
         return view;
     }
 
-    /**
-     * TODO
-     * 1. 이메일을 확인하세요 메세지 페이지 (회원의 이름도 넣어야함)
-     * 2. 이메일 재전송 버튼 -> 회원의 이메일로 인증메일을 다시 보내는 기능
-     */
     @GetMapping ("/check-email")
-    public String checkEmail () {
-
+    public String checkEmail (@CurrentUser Account account, Model model) {
+        model.addAttribute("email", account.getEmail());
         return "/account/check-email";
+    }
+
+    @GetMapping ("/resend-confirm-email")
+    public String resendConfirmEmail (@CurrentUser Account account, Model model) {
+        if(!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송 가능합니다.");
+            model.addAttribute("email", account.getEmail());
+            return "account/check-email";
+        }
+
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
     }
 
 

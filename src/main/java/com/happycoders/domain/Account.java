@@ -27,25 +27,29 @@ public class Account {
     //인증 토큰
     private String emailCheckToken;
 
+    //인증 토큰 발급 시간
+    private LocalDateTime emailCheckTokenGeneratedAt;
+
     //가입한 날짜
+
     private LocalDateTime joinedAt;
-
     //자기소개글
+
     private String bio;
-
     //개인 웹사이트 주소
+
     private String url;
-
     //직업
-    private String occupation;
 
+    private String occupation;
     //사는 지역
+
     private String location; // varchar(255)
 
     @Lob @Basic (fetch = FetchType.EAGER)
     private String profileImage; // varchar (255)보다 커야하므로 lob으로
-
     //이벤트 발생의 여부 (알림을 이메일로 받을것인지 웹으로받을것인지의 대한 설정)
+
     private boolean studyCreatedByEmail;
 
     private boolean studyCreatedByWeb;
@@ -61,6 +65,7 @@ public class Account {
     public void generateEmailCheckToken() {
         //email token을 UUID로 random하게 한다.
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
     public void completeSignUp() {
@@ -70,6 +75,10 @@ public class Account {
 
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 
 }

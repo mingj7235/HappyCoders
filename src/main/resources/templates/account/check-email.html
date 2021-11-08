@@ -3,21 +3,23 @@
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-light">
 <div th:replace="fragments.html :: main-nav"></div>
-<!-- view 에서 error 를 제공한다면 즉, error가 있다면   면-->
-<div class="py-5 text-center" th:if="${error}">
-    <p class="lead">해피코더스 이메일 확인</p>
-    <div class="alert alert-danger" role="alert">
-        이메일 확인 링크가 정확하지 않습니다.
-    </div>
-</div>
 
-<div class="py-5 text-center" th:if="${error == null}">
-    <p class="lead">해피코더스 이메일 확인</p>
-    <h2>
-        이메일을 확인 했습니다. <span th:text="${numberOfUser}">10</span> 번째 회원,
-        <span th:text="${nickname}">김민재</span>님 가입을 축하합니다.
-    </h2>
-    <small class="text-info">이제부터 가입할 때 사용한 이메일 또는 닉네임과 패스워드로 로그인할 수 있습니다.</small>
+<div class="container">
+    <div class="py-5 text-center" th:if="${error != null}">
+        <p class="lead">해피코더스 가입</p>
+        <div class="alert alert-danger" role="alert" th:text="${error}"></div>
+        <p class="lead" th:text="${email}">test@email.com</p>
+    </div>
+
+    <div class="py-5 text-center" th:if="${error == null}">
+        <p class="lead">해피코더스 가입</p>
+        <h2>해피코더스 서비스를 사용하려면 인증 이메일을 확인해주세요.</h2>
+
+        <div>
+            <p class="lead" th:text="${email}">test@email.com</p>
+            <a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">인증 이메일 다시 보내기</a>
+        </div>
+    </div>
 </div>
 
 <div th:replace="fragments.html :: footer"></div>

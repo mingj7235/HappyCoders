@@ -52,7 +52,7 @@ public class AccountService {
         return newAccount;
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
         mailMessage.setSubject("해피코더스, 회원 가입 인증"); //메일 제목
