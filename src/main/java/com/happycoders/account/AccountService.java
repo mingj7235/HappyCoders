@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class AccountService implements UserDetailsService {
 
@@ -31,7 +32,7 @@ public class AccountService implements UserDetailsService {
      * newAccount 객체는 이미 detached 상태다. 그러므로 processNewAccount 메소드에 @transactional을 붙여주어서 트랜젝션이 유지되도록 해야한다.
      * 그렇게된다면 newAccount 객체는 계속 persist 객체가 되고, DB와 계속 싱크가 되어준다.
      */
-    @Transactional
+
     public Account processNewAccount (SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
@@ -80,9 +81,9 @@ public class AccountService implements UserDetailsService {
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        context.setAuthentication(authenticate);
 
-
     }
 
+    @Transactional (readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickName) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickName);
@@ -95,6 +96,11 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
+    }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 
 }

@@ -67,8 +67,8 @@ public class AccountController {
             model.addAttribute("error", "wrong.token");
             return view;
         }
-        account.completeSignUp(); // refactor
-        accountService.login(account);
+
+        accountService.completeSignUp(account);
         // view에 전달
         model.addAttribute("numberOfUser", accountRepository.count()); // 몇번째 유저인지
         model.addAttribute("nickname", account.getNickname());
