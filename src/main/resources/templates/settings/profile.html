@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2">
+            <div th:replace="fragments.html :: settings-menu (currentMenu = 'profile')"></div>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <h2 class="col-sm-12" th:text="${account.nickname}">Joshua</h2>
+            </div>
+            <div class="row mt-3">
+                <form class="col-sm-6" method="post" novalidate th:action="@{/settings/profile}" th:object="${profile}">
+                    <div class="form-group">
+                        <label for="bio"> 한 줄 소개</label>
+                        <input aria-describedby="bioHelp" class="form-control" id="bio" placeholder="간략한 소개를 작성해주세요" required
+                               th:field="*{bio}" type="text">
+                        <small class="form-text text-muted" id="bioHelp">
+                            길지 않게 35자 이내로 입력해주세요
+                        </small>
+                        <small class="form-text text-danger" th:errors="*{bio}" th:if="${#fields.hasErrors('bio')}">
+                            조금 길어요.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url">링크</label>
+                        <input aria-describedby="urlHelp" class="form-control" id="url" placeholder="개인 홈페이지 주소" required
+                               th:field="*{url}" type="url">
+                        <small class="form-text text-muted" id="urlHelp">
+                            개인 블로그, 유튜브, 포트폴리오든 본인을 표현할 수 있는 링크를 추가해주세요
+                        </small>
+                        <small class="form-text text-danger" th:errors="*{url}" th:if="${#fields.hasErrors('url')}">
+                            올바른 URL이 아닙니다. 예시처럼 입력해주세요.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="occupation">직업</label>
+                        <input aria-describedby="occupationHelp" class="form-control" id="occupation" placeholder="어떤 일을 하고 계신가요?"
+                               required th:field="*{occupation}" type="text">
+                        <small class="form-text text-muted" id="occupationHelp">
+                            개발자 ? 매니저 ? 취준생 ?
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">활동 지역</label>
+                        <input aria-describedby="locationHelp" class="form-control" id="location" placeholder="서울, 부산, 대구 등"
+                               required th:field="*{location}" type="text">
+                        <small class="form-text text-muted" id="locaitonHelp">
+                            주요 활동 (사는곳 or 직장을 다니는 곳) 의 도시이름을 알려주세요
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <button aria-describedby="submitHelp" class="btn btn-primary btn-block" type="submit">수정하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments.html :: footer"></div>
+</div>
+</body>
+</html>
