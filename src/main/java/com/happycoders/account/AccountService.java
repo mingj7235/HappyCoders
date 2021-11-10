@@ -1,6 +1,7 @@
 package com.happycoders.account;
 
 import com.happycoders.domain.Account;
+import com.happycoders.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -101,6 +102,17 @@ public class AccountService implements UserDetailsService {
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
+    }
+
+    public void updateProfile(Account account, Profile profile) {
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setBio(profile.getBio());
+        account.setLocation(profile.getLocation());
+
+        //현재 파라미터로 받아왔던 account는 detached 된 녀석이다. (controller에서 http session을 통해 들어온 녀석)
+        //그러므로 JPA에서 DB 변경을 해주기위해서는 save를 통해 merge를 시켜준다.
+        accountRepository.save(account);
     }
 
 }
