@@ -109,8 +109,7 @@ public class AccountService implements UserDetailsService {
         account.setOccupation(profile.getOccupation());
         account.setBio(profile.getBio());
         account.setLocation(profile.getLocation());
-
-        //FIXME 프로필 이미지 변경 로직
+        account.setProfileImage(profile.getProfileImage());
 
         //현재 파라미터로 받아왔던 account는 detached 된 녀석이다. (controller에서 http session을 통해 들어온 녀석)
         //그러므로 JPA에서 DB 변경을 해주기위해서는 save를 통해 merge를 시켜준다.
