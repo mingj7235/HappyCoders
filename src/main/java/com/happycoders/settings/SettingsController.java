@@ -23,6 +23,9 @@ public class SettingsController {
     static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
     static final String SETTINGS_PROFILE_URL = "/settings/profile";
 
+    static final String SETTINGS_CHECK_PASSWORD_VIEW_NAME = "settings/check-password";
+    static final String SETTINGS_CHECK_PASSWORD_URL = "/settings/check-password";
+
     static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
     static final String SETTINGS_PASSWORD_URL = "/settings/password";
 
@@ -58,6 +61,21 @@ public class SettingsController {
         return "redirect:" + SETTINGS_PROFILE_URL;
     }
 
+    //TODO : 비밀번호 다시 한 번 재 확인 후 비밀번호 변경 페이지로 이동 (패스워드 수정 강의에 있는 메모 확인 -> matchers 사용)
+//    @GetMapping (SETTINGS_CHECK_PASSWORD_URL)
+//    public String checkPasswordForm (@CurrentUser Account account, Model model) {
+//        model.addAttribute(account);
+//        model.addAttribute(new PasswordCheck());
+//        return SETTINGS_CHECK_PASSWORD_VIEW_NAME;
+//    }
+//
+//    @PostMapping (SETTINGS_CHECK_PASSWORD_URL)
+//    public String checkPassword (@CurrentUser Account account,
+//                                 @Valid @ModelAttribute PasswordCheck passwordCheck,
+//                                 Errors errors, Model model) {
+//
+//    }
+
     @GetMapping(SETTINGS_PASSWORD_URL)
     public String updatePasswordForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
@@ -68,8 +86,7 @@ public class SettingsController {
     @PostMapping (SETTINGS_PASSWORD_URL)
     public String updatePassword (@CurrentUser Account account,
                                   @Valid @ModelAttribute PasswordForm passwordForm,
-                                  RedirectAttributes attributes,
-                                  Errors errors, Model model) {
+                                  Errors errors, Model model, RedirectAttributes attributes) {
 
         if (errors.hasErrors()) {
 

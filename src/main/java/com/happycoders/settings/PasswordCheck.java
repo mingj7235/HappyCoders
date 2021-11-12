@@ -1,2 +1,9 @@
-package com.happycoders.settings;public class PasswordCheck {
+package com.happycoders.settings;
+
+import lombok.Data;
+
+@Data
+public class PasswordCheck {
+
+    private String password;
 }
