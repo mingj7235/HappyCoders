@@ -5,6 +5,7 @@ import com.happycoders.account.CurrentUser;
 import com.happycoders.domain.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -35,6 +36,7 @@ public class SettingsController {
     static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
 
     private final AccountService accountService;
+    private final ModelMapper modelMapper;
 
     //Validation을 위해 InitBinder를 사용한다.
     @InitBinder ("passwordForm")
@@ -46,7 +48,7 @@ public class SettingsController {
     public String updateProfileForm(@CurrentUser Account account, Model model) {
 
         model.addAttribute(account);
-        model.addAttribute(new Profile(account));
+        model.addAttribute(modelMapper.map(account, Profile.class));
         return SETTINGS_PROFILE_VIEW_NAME;
     }
 
@@ -108,7 +110,7 @@ public class SettingsController {
     @GetMapping (SETTINGS_NOTIFICATIONS_URL)
     public String updateNotificationsForm (@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Notifications(account));
+        model.addAttribute(modelMapper.map(account, Notifications.class));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
@@ -123,12 +125,6 @@ public class SettingsController {
         accountService.updateNotifications (account, notifications);
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
 
-        log.info(String.valueOf(account.isStudyCreatedByEmail()));
-        log.info(String.valueOf(account.isStudyCreatedByWeb()));
-        log.info(String.valueOf(account.isStudyEnrollmentResultByEmail()));
-        log.info(String.valueOf(account.isStudyEnrollmentResultByWeb()));
-        log.info(String.valueOf(account.isStudyUpdatedByEmail()));
-        log.info(String.valueOf(account.isStudyUpdatedByWeb()));
         return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
     }
 
