@@ -2,10 +2,12 @@ package com.happycoders.main;
 
 import com.happycoders.account.CurrentUser;
 import com.happycoders.domain.Account;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Slf4j
 @Controller
 public class MainController {
 
@@ -16,7 +18,10 @@ public class MainController {
     public String home (@CurrentUser Account account, Model model) {
         if (account != null) {
             model.addAttribute(account);
+            log.info("가입 직후 ");
+            log.info(String.valueOf(account.isStudyUpdatedByWeb()));
         }
+
 
         return "index";
     }

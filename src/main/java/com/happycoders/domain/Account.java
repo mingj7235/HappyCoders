@@ -48,7 +48,6 @@ public class Account {
 
     @Lob @Basic (fetch = FetchType.EAGER)
     private String profileImage; // varchar (255)보다 커야하므로 lob으로
-    //이벤트 발생의 여부 (알림을 이메일로 받을것인지 웹으로받을것인지의 대한 설정)
 
     private boolean studyCreatedByEmail;
 
@@ -60,7 +59,7 @@ public class Account {
 
     private boolean studyUpdatedByEmail;
 
-    private boolean studyUpdatedByWeb = true;
+    private boolean studyUpdatedByWeb = true; //FIXME : 왜 이건 초기값이 true가 되지 않는가? ㅋㅋㅋㅋㅋ
 
     public void generateEmailCheckToken() {
         //email token을 UUID로 random하게 한다.

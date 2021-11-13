@@ -4,6 +4,7 @@ import com.happycoders.account.AccountService;
 import com.happycoders.account.CurrentUser;
 import com.happycoders.domain.Account;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class SettingsController {
@@ -120,6 +122,13 @@ public class SettingsController {
         }
         accountService.updateNotifications (account, notifications);
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
+
+        log.info(String.valueOf(account.isStudyCreatedByEmail()));
+        log.info(String.valueOf(account.isStudyCreatedByWeb()));
+        log.info(String.valueOf(account.isStudyEnrollmentResultByEmail()));
+        log.info(String.valueOf(account.isStudyEnrollmentResultByWeb()));
+        log.info(String.valueOf(account.isStudyUpdatedByEmail()));
+        log.info(String.valueOf(account.isStudyUpdatedByWeb()));
         return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
     }
 
