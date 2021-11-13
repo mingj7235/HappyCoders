@@ -1,5 +1,6 @@
-package com.happycoders.settings;
+package com.happycoders.settings.validator;
 
+import com.happycoders.settings.form.PasswordForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

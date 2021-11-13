@@ -1,8 +1,8 @@
 package com.happycoders.account;
 
 import com.happycoders.domain.Account;
-import com.happycoders.settings.Notifications;
-import com.happycoders.settings.Profile;
+import com.happycoders.settings.form.Notifications;
+import com.happycoders.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;

@@ -1,4 +1,4 @@
-package com.happycoders.settings;
+package com.happycoders.settings.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

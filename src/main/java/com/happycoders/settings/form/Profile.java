@@ -1,4 +1,4 @@
-package com.happycoders.settings;
+package com.happycoders.settings.form;
 
 import com.happycoders.domain.Account;
 import lombok.Data;
