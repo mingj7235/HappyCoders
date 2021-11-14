@@ -3,6 +3,7 @@ package com.happycoders.settings;
 import com.happycoders.account.AccountService;
 import com.happycoders.account.CurrentUser;
 import com.happycoders.domain.Account;
+import com.happycoders.settings.form.NicknameForm;
 import com.happycoders.settings.form.Notifications;
 import com.happycoders.settings.form.PasswordForm;
 import com.happycoders.settings.form.Profile;
@@ -131,6 +132,28 @@ public class SettingsController {
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
 
         return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
+    }
+
+    @GetMapping (SETTINGS_ACCOUNT_VIEW_NAME)
+    public String updateAccountForm (@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(account, NicknameForm.class));
+        return SETTINGS_ACCOUNT_URL;
+    }
+
+    @PostMapping (SETTINGS_ACCOUNT_VIEW_NAME)
+    public String updateAccount (@CurrentUser Account account,
+                                 @Valid @ModelAttribute NicknameForm nicknameForm,
+                                 Errors errors, Model model, RedirectAttributes attributes) {
+
+        if(errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS_ACCOUNT_VIEW_NAME;
+        }
+
+        accountService.updateNickname (account, nicknameForm.getNickname());
+        attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
+        return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
 
 }
