@@ -7,6 +7,7 @@ import com.happycoders.settings.form.NicknameForm;
 import com.happycoders.settings.form.Notifications;
 import com.happycoders.settings.form.PasswordForm;
 import com.happycoders.settings.form.Profile;
+import com.happycoders.settings.validator.NicknameValidator;
 import com.happycoders.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,25 @@ public class SettingsController {
 
     private final ModelMapper modelMapper;
 
+    private final NicknameValidator nicknameValidator;
+
     //Validation을 위해 InitBinder를 사용한다.
+
+    /**
+     * InitBinder 의 움직임
+     * @InitBinder("DTO클래스명(앞의대문자는소문자로변경)") 에서 DTO를 처리할때,
+     * addValidators에 추가한 Validator를 통해 검증하라는 명을 하면,
+     * controller에서 @Valid를 통해, 해당 DTO에 해놓은 Validation과, InitBinder의 validator의 validation을 한다.
+     * 그 후 처리할 해당 DTO 검증 결과가 Errors에 담기게되고, Errors.hasError 가 된다는 말은, 해당 validator에 걸린다는 말이다.
+     */
     @InitBinder("passwordForm")
-    public void initBinder(WebDataBinder webDataBinder) {
+    public void passwordFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(new PasswordFormValidator());
+    }
+
+    @InitBinder ("nicknameForm")
+    public void nicknameFormInitBinder (WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(nicknameValidator);
     }
 
     @GetMapping(SETTINGS_PROFILE_URL)

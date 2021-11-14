@@ -127,6 +127,7 @@ public class AccountService implements UserDetailsService {
     public void updateNickname(Account account, String nickname) {
         account.setNickname(nickname);
         accountRepository.save(account);
+        login(account); //login을 해주지 않으면 navigation bar 에서 authentication 인증은 받아야하므로 ! 해야한다.
     }
 
 }
