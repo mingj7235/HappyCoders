@@ -130,4 +130,13 @@ public class AccountService implements UserDetailsService {
         login(account); //login을 해주지 않으면 navigation bar 에서 authentication 인증은 받아야하므로 ! 해야한다.
     }
 
+    public void sendLoginLink(Account account) {
+        account.generateEmailCheckToken();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setSubject("HAPPY CODERS 로그인 링크");
+        mailMessage.setText("로그인 링크 : /login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        javaMailSender.send(mailMessage);
+    }
+
 }

@@ -142,5 +142,7 @@ class SettingsControllerTest {
 
     }
 
+    // TODO : 닉네임 테스트 코드 만들기
+
 
 }
