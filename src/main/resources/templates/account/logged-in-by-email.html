@@ -5,20 +5,16 @@
 <div th:replace="fragments.html :: main-nav"></div>
 
 <div class="container">
-    <div class="py-5 text-center" th:if="${error != null}">
-        <p class="lead">해피코더스 가입</p>
-        <div class="alert alert-danger" role="alert" th:text="${error}"></div>
-        <p class="lead" th:text="${email}">test@email.com</p>
+    <div class="py-5 text-center" th:if="${error}">
+        <p class="lead">HAPPY CODERS 이메일 로그인</p>
+        <div class="alert alert-danger" role="alert" th:text="${error}">
+            로그인 할 수 없습니다.
+        </div>
     </div>
 
     <div class="py-5 text-center" th:if="${error == null}">
-        <p class="lead">해피코더스 가입</p>
-        <h2>해피코더스 서비스를 사용하려면 인증 이메일을 확인해주세요.</h2>
-
-        <div>
-            <p class="lead" th:text="${email}">test@email.com</p>
-            <a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">인증 이메일 다시 보내기</a>
-        </div>
+        <p class="lead">HAPPY CODERS 이메일 로그인</p>
+        <h2>이메일로 로그인이 성공했습니다. <a th:href="@{/settings/password}">패스워드를 변경</a>해주세요.</h2>
     </div>
 </div>
 

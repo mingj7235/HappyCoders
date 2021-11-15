@@ -2,6 +2,7 @@ package com.happycoders.account;
 
 import com.happycoders.domain.Account;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AccountController {
@@ -131,7 +133,7 @@ public class AccountController {
         return "redirect:/email-login";
     }
 
-    @PostMapping ("login-by-email")
+    @GetMapping ("login-by-email")
     public String loginByEmail (String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
         if (account == null || !account.isValidToken(token)) {
@@ -139,6 +141,7 @@ public class AccountController {
             return "account/logged-in-by-email";
         }
 
+        log.info("check");
         accountService.login(account);
         return "account/logged-in-by-email";
     }

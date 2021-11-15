@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/","/login", "/sign-up", "/check-email-token",
-                        "/email-login", "/check-email-login", "/login-link").permitAll() //Get이든 Post든 모든 요청은 permitAll. 즉, 인증없이 권한없어도 들어올수있다.
+                        "/email-login", "/login-by-email").permitAll() //Get이든 Post든 모든 요청은 permitAll. 즉, 인증없이 권한없어도 들어올수있다.
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll() // profile 요청은 Get 요청만 모두에게 열려있음
                 .anyRequest().authenticated(); //나머지요청은 로그인을 해야지 볼수있다.
 
