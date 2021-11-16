@@ -1,5 +1,7 @@
-package com.happycoders.account;
+package com.happycoders.account.validator;
 
+import com.happycoders.account.AccountRepository;
+import com.happycoders.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

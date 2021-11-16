@@ -1,7 +1,7 @@
 package com.happycoders;
 
 import com.happycoders.account.AccountService;
-import com.happycoders.account.SignUpForm;
+import com.happycoders.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
