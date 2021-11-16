@@ -60,7 +60,7 @@ public class Account {
 
     private boolean studyUpdatedByEmail;
 
-    private boolean studyUpdatedByWeb = true; //FIXME : 왜 이건 초기값이 true가 되지 않는가? ㅋㅋㅋㅋㅋ
+    private boolean studyUpdatedByWeb = true; // FIXME : 왜 이건 초기값이 true가 되지 않는가? ㅋㅋㅋㅋㅋ
 
     @ManyToMany
     private Set<Tag> tags;
