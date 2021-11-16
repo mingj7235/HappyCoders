@@ -1,5 +1,7 @@
 package com.happycoders.account;
 
+import com.happycoders.account.form.SignUpForm;
+import com.happycoders.account.validator.SignUpFormValidator;
 import com.happycoders.domain.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -141,7 +143,6 @@ public class AccountController {
             return "account/logged-in-by-email";
         }
 
-        log.info("check");
         accountService.login(account);
         return "account/logged-in-by-email";
     }

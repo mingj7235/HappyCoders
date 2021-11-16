@@ -1,5 +1,6 @@
 package com.happycoders.account;
 
+import com.happycoders.account.form.SignUpForm;
 import com.happycoders.domain.Account;
 import com.happycoders.settings.form.Notifications;
 import com.happycoders.settings.form.Profile;
