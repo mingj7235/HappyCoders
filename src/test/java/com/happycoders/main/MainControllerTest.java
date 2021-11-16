@@ -2,7 +2,7 @@ package com.happycoders.main;
 
 import com.happycoders.account.AccountRepository;
 import com.happycoders.account.AccountService;
-import com.happycoders.account.SignUpForm;
+import com.happycoders.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
