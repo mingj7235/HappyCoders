@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Transactional
@@ -138,13 +139,18 @@ public class AccountService implements UserDetailsService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(account.getEmail());
         mailMessage.setSubject("HAPPY CODERS 로그인 링크");
-        mailMessage.setText("로그인 링크 : /login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        mailMessage.setText("로그인 링크 : /login- by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
     }
 
     public void addTag(Account account, Tag tag) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().add(tag));
+    }
+
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getTags();
     }
 
 }
