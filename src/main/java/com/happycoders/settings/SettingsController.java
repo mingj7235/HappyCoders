@@ -188,7 +188,7 @@ public class SettingsController {
     }
 
     //AJAX
-    @PostMapping ("settings/tags/add")
+    @PostMapping ("/settings/tags/add")
     @ResponseBody
     public ResponseEntity addTag (@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
@@ -201,6 +201,19 @@ public class SettingsController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping ("/settings/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTag (@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title).orElseThrow();
+
+        accountService.removeTag(account, tag);
+
+        return ResponseEntity.ok().build();
+
+    }
+
 
 }
 
