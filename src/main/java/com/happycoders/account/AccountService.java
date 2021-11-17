@@ -2,6 +2,7 @@ package com.happycoders.account;
 
 import com.happycoders.account.form.SignUpForm;
 import com.happycoders.domain.Account;
+import com.happycoders.domain.Tag;
 import com.happycoders.settings.form.Notifications;
 import com.happycoders.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -138,6 +140,11 @@ public class AccountService implements UserDetailsService {
         mailMessage.setSubject("HAPPY CODERS 로그인 링크");
         mailMessage.setText("로그인 링크 : /login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
     }
 
 }

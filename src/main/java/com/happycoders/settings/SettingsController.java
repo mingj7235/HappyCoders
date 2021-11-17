@@ -3,26 +3,24 @@ package com.happycoders.settings;
 import com.happycoders.account.AccountService;
 import com.happycoders.account.CurrentUser;
 import com.happycoders.domain.Account;
-import com.happycoders.settings.form.NicknameForm;
-import com.happycoders.settings.form.Notifications;
-import com.happycoders.settings.form.PasswordForm;
-import com.happycoders.settings.form.Profile;
+import com.happycoders.domain.Tag;
+import com.happycoders.settings.form.*;
 import com.happycoders.settings.validator.NicknameValidator;
 import com.happycoders.settings.validator.PasswordFormValidator;
+import com.happycoders.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,6 +48,8 @@ public class SettingsController {
     private final ModelMapper modelMapper;
 
     private final NicknameValidator nicknameValidator;
+
+    private final TagRepository tagRepository;
 
     //Validation을 위해 InitBinder를 사용한다.
 
@@ -180,6 +180,21 @@ public class SettingsController {
     public String updateTags (@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         return SETTINGS_TAGS_VIEW_NAME;
+    }
+
+    //AJAX
+    @PostMapping ("settings/tags/add")
+    @ResponseBody
+    public ResponseEntity addTag (@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title)
+                .orElseGet(() -> tagRepository.save(Tag.builder()
+                .title(tagForm.getTagTitle())
+                .build()));
+
+        accountService.addTag(account, tag);
+
+        return ResponseEntity.ok().build();
     }
 
 }
