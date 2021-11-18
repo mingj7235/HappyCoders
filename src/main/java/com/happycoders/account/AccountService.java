@@ -153,6 +153,7 @@ public class AccountService implements UserDetailsService {
         byId.ifPresent(a -> a.getTags().add(tag));
     }
 
+    // TODO : 관리자 기능 -> Tag 중복 or 참조 없는 것들 찾아서 수정하는 기능 구현할 것
     public void removeTag(Account account, Tag tag) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().remove(tag));
