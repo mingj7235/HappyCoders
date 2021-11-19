@@ -144,5 +144,15 @@ class SettingsControllerTest {
 
     // TODO : 닉네임 테스트 코드 만들기
 
+    @WithAccount(value = "minjae")
+    @DisplayName("알림 설정 수정")
+    @Test
+    void updateNotifications () {
+        mockMvc.perform(post(SettingsController.SETTINGS_NOTIFICATIONS_URL)
+                .with(csrt())
+        )
+                .andExpect(status().isOk())
+    }
+
 
 }

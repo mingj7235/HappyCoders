@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,18 +32,23 @@ import java.util.stream.Collectors;
 public class SettingsController {
 
     static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
+
     static final String SETTINGS_PROFILE_URL = "/" + SETTINGS_PROFILE_VIEW_NAME;
 
     static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
+
     static final String SETTINGS_PASSWORD_URL = "/" + SETTINGS_PASSWORD_VIEW_NAME;
 
     static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
+
     static final String SETTINGS_NOTIFICATIONS_URL = "/" + SETTINGS_NOTIFICATIONS_VIEW_NAME;
 
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
+
     static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
 
     static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
+
     static final String SETTINGS_TAGS_URL = "/" + SETTINGS_TAGS_VIEW_NAME;
 
 
@@ -62,6 +66,7 @@ public class SettingsController {
 
     /**
      * InitBinder 의 움직임
+     *
      * @InitBinder("DTO클래스명(앞의대문자는소문자로변경)") 에서 DTO를 처리할때,
      * addValidators에 추가한 Validator를 통해 검증하라는 명을 하면,
      * controller에서 @Valid를 통해, 해당 DTO에 해놓은 Validation과, InitBinder의 validator의 validation을 한다.
@@ -72,8 +77,8 @@ public class SettingsController {
         webDataBinder.addValidators(new PasswordFormValidator());
     }
 
-    @InitBinder ("nicknameForm")
-    public void nicknameFormInitBinder (WebDataBinder webDataBinder) {
+    @InitBinder("nicknameForm")
+    public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(nicknameValidator);
     }
 
@@ -161,30 +166,30 @@ public class SettingsController {
         return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
     }
 
-    @GetMapping (SETTINGS_ACCOUNT_VIEW_NAME)
-    public String updateAccountForm (@CurrentUser Account account, Model model) {
+    @GetMapping(SETTINGS_ACCOUNT_VIEW_NAME)
+    public String updateAccountForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, NicknameForm.class));
         return SETTINGS_ACCOUNT_URL;
     }
 
-    @PostMapping (SETTINGS_ACCOUNT_VIEW_NAME)
-    public String updateAccount (@CurrentUser Account account,
-                                 @Valid @ModelAttribute NicknameForm nicknameForm,
-                                 Errors errors, Model model, RedirectAttributes attributes) {
+    @PostMapping(SETTINGS_ACCOUNT_VIEW_NAME)
+    public String updateAccount(@CurrentUser Account account,
+                                @Valid @ModelAttribute NicknameForm nicknameForm,
+                                Errors errors, Model model, RedirectAttributes attributes) {
 
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_ACCOUNT_VIEW_NAME;
         }
 
-        accountService.updateNickname (account, nicknameForm.getNickname());
+        accountService.updateNickname(account, nicknameForm.getNickname());
         attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
         return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
 
-    @GetMapping (SETTINGS_TAGS_URL)
-    public String updateTags (@CurrentUser Account account, Model model) throws JsonProcessingException {
+    @GetMapping(SETTINGS_TAGS_URL)
+    public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
 
         Set<Tag> tags = accountService.getTags(account);
@@ -199,9 +204,9 @@ public class SettingsController {
     }
 
     //AJAX
-    @PostMapping (SETTINGS_TAGS_URL + "/add")
+    @PostMapping(SETTINGS_TAGS_URL + "/add")
     @ResponseBody
-    public ResponseEntity addTag (@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
 //        Tag tag = tagRepository.findByTitle(title)
 //                .orElseGet(() -> tagRepository.save(Tag.builder()
@@ -215,9 +220,9 @@ public class SettingsController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping (SETTINGS_TAGS_URL +"/remove")
+    @PostMapping(SETTINGS_TAGS_URL + "/remove")
     @ResponseBody
-    public ResponseEntity removeTag (@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         Tag tag = tagRepository.findByTitle(title);
         if (tag == null) {
@@ -227,7 +232,6 @@ public class SettingsController {
         return ResponseEntity.ok().build();
 
     }
-
 
 }
 
