@@ -62,7 +62,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("계정의 태그 수정 폼")
     @Test
-    void updateTagsForm () throws Exception {
+    void updateTagsForm() throws Exception {
         mockMvc.perform(get(SettingsController.SETTINGS_TAGS_URL))
                 .andExpect(view().name(SettingsController.SETTINGS_TAGS_VIEW_NAME))
                 .andExpect(model().attributeExists("account"))
@@ -78,11 +78,11 @@ class SettingsControllerTest {
         tagForm.setTagTitle("newTag");
 
         mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
-                .contentType(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
 //                .content("{\"tagTitle\": \"newTag\"}")
-                .content(objectMapper.writeValueAsString(tagForm))
-                .with(csrf())
-        )
+                                .content(objectMapper.writeValueAsString(tagForm))
+                                .with(csrf())
+                )
                 .andExpect(status().isOk());
         Tag newTag = tagRepository.findByTitle("newTag");
         assertNotNull(newTag);
@@ -111,8 +111,6 @@ class SettingsControllerTest {
                 .andExpect(status().isOk());
         assertFalse(account.getTags().contains(newTag));
     }
-
-
 
 
     //    @WithUserDetails(value = "minjae", setupBefore = TestExecutionEvent.TEST_EXECUTION) //@BeforeEach 전에 실행이 되는 bug가 있다.
@@ -170,7 +168,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("패스워드 수정 폼")
     @Test
-    void updatePassword_form () throws Exception {
+    void updatePassword_form() throws Exception {
         mockMvc.perform(get(SettingsController.SETTINGS_PASSWORD_URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
@@ -180,12 +178,12 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("패스워드 수정 - 입력값 정싱")
     @Test
-    void updatePassword_success () throws Exception {
+    void updatePassword_success() throws Exception {
         mockMvc.perform(post(SettingsController.SETTINGS_PASSWORD_URL)
-                .param("newPassword", "123456789")
-                .param("newPasswordConfirm", "123456789")
-                .with(csrf())
-    )
+                        .param("newPassword", "123456789")
+                        .param("newPasswordConfirm", "123456789")
+                        .with(csrf())
+                )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(SettingsController.SETTINGS_PASSWORD_URL))
                 .andExpect(flash().attributeExists("message"));
@@ -197,12 +195,12 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("패스워드 수정 - 입력값 에러 - 패스워드 불일치")
     @Test
-    void updatePassword_fail () throws Exception {
+    void updatePassword_fail() throws Exception {
         mockMvc.perform(post(SettingsController.SETTINGS_PASSWORD_URL)
-                .param("newPassword", "123456789")
-                .param("newPasswordConfirm", "1111111111")
-                .with(csrf())
-    )
+                        .param("newPassword", "123456789")
+                        .param("newPasswordConfirm", "1111111111")
+                        .with(csrf())
+                )
                 .andExpect(status().isOk())
                 .andExpect(view().name(SettingsController.SETTINGS_PASSWORD_VIEW_NAME))
                 .andExpect(model().hasErrors())
@@ -212,7 +210,6 @@ class SettingsControllerTest {
     }
 
     // TODO : 닉네임 테스트 코드 만들기
-
 
 //    @WithAccount(value = "minjae")
 //    @DisplayName("알림 설정 수정")
