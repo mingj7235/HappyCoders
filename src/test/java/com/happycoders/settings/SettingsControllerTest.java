@@ -1,9 +1,13 @@
 package com.happycoders.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.happycoders.WithAccount;
 import com.happycoders.account.AccountRepository;
 import com.happycoders.account.AccountService;
 import com.happycoders.domain.Account;
+import com.happycoders.domain.Tag;
+import com.happycoders.settings.form.TagForm;
+import com.happycoders.tag.TagRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -20,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class SettingsControllerTest {
@@ -36,6 +43,12 @@ class SettingsControllerTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    TagRepository tagRepository;
+
     @BeforeEach
     void beforeEach() {
 
@@ -45,6 +58,62 @@ class SettingsControllerTest {
     void afterEach() {
         accountRepository.deleteAll();
     }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("계정의 태그 수정 폼")
+    @Test
+    void updateTagsForm () throws Exception {
+        mockMvc.perform(get(SettingsController.SETTINGS_TAGS_URL))
+                .andExpect(view().name(SettingsController.SETTINGS_TAGS_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whiteList"))
+                .andExpect(model().attributeExists("tags"));
+    }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("계정에 태그 추가")
+    @Test
+    void addTag() throws Exception {
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\"tagTitle\": \"newTag\"}")
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf())
+        )
+                .andExpect(status().isOk());
+        Tag newTag = tagRepository.findByTitle("newTag");
+        assertNotNull(newTag);
+        assertTrue(accountRepository.findByNickname("minjae").getTags().contains(newTag));
+    }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("계정에 태그 삭제")
+    @Test
+    void removeTag() throws Exception {
+        Account account = accountRepository.findByNickname("minjae");
+        Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
+        accountService.addTag(account, newTag);
+
+        assertTrue(account.getTags().contains(newTag));
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/remove")
+                                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\"tagTitle\": \"newTag\"}")
+                                .content(objectMapper.writeValueAsString(tagForm))
+                                .with(csrf())
+                )
+                .andExpect(status().isOk());
+        assertFalse(account.getTags().contains(newTag));
+    }
+
+
+
 
     //    @WithUserDetails(value = "minjae", setupBefore = TestExecutionEvent.TEST_EXECUTION) //@BeforeEach 전에 실행이 되는 bug가 있다.
     @WithAccount(value = "minjae") //test를 위해서 만든 annotation
@@ -144,15 +213,15 @@ class SettingsControllerTest {
 
     // TODO : 닉네임 테스트 코드 만들기
 
-    @WithAccount(value = "minjae")
-    @DisplayName("알림 설정 수정")
-    @Test
-    void updateNotifications () {
-        mockMvc.perform(post(SettingsController.SETTINGS_NOTIFICATIONS_URL)
-                .with(csrt())
-        )
-                .andExpect(status().isOk())
-    }
 
+//    @WithAccount(value = "minjae")
+//    @DisplayName("알림 설정 수정")
+//    @Test
+//    void updateNotifications () {
+//        mockMvc.perform(post(SettingsController.SETTINGS_NOTIFICATIONS_URL)
+//                .with(csrt())
+//        )
+//                .andExpect(status().isOk())
+//    }
 
 }
