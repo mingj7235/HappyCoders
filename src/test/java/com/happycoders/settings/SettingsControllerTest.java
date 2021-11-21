@@ -211,14 +211,48 @@ class SettingsControllerTest {
 
     // TODO : 닉네임 테스트 코드 만들기
 
-//    @WithAccount(value = "minjae")
-//    @DisplayName("알림 설정 수정")
-//    @Test
-//    void updateNotifications () {
-//        mockMvc.perform(post(SettingsController.SETTINGS_NOTIFICATIONS_URL)
-//                .with(csrt())
-//        )
-//                .andExpect(status().isOk())
-//    }
+    @WithAccount(value = "minjae")
+    @DisplayName("알림 설정 수정 폼")
+    @Test
+    void Notifications_Form () throws Exception{
+        mockMvc.perform(get(SettingsController.SETTINGS_NOTIFICATIONS_URL))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("notifications"));
+    }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("알림 설정 수정")
+    @Test
+    void updateNotifications () throws Exception {
+
+        Account account = accountRepository.findByNickname("minjae");
+        assertTrue(account.isStudyUpdatedByWeb());
+        assertTrue(account.isStudyCreatedByWeb());
+        assertTrue(account.isStudyEnrollmentResultByWeb());
+        assertFalse(account.isStudyUpdatedByEmail());
+        assertFalse(account.isStudyCreatedByEmail());
+        assertFalse(account.isStudyEnrollmentResultByEmail());
+
+        mockMvc.perform(post(SettingsController.SETTINGS_NOTIFICATIONS_URL)
+                .param("studyUpdatedByWeb", "false")
+                .param("studyCreatedByWeb", "false")
+                .param("studyEnrollmentResultByWeb", "false")
+                .param("studyUpdatedByEmail", "true")
+                .param("studyCreatedByEmail", "true")
+                .param("studyEnrollmentResultByEmail", "true")
+                .with(csrf())
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(SettingsController.SETTINGS_NOTIFICATIONS_URL))
+                .andExpect(flash().attributeExists("message"));
+
+        assertFalse(account.isStudyUpdatedByWeb());
+        assertFalse(account.isStudyCreatedByWeb());
+        assertFalse(account.isStudyEnrollmentResultByWeb());
+        assertTrue(account.isStudyUpdatedByEmail());
+        assertTrue(account.isStudyCreatedByEmail());
+        assertTrue(account.isStudyEnrollmentResultByEmail());
+    }
 
 }

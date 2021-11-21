@@ -166,14 +166,14 @@ public class SettingsController {
         return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
     }
 
-    @GetMapping(SETTINGS_ACCOUNT_VIEW_NAME)
+    @GetMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccountForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, NicknameForm.class));
-        return SETTINGS_ACCOUNT_URL;
+        return SETTINGS_ACCOUNT_VIEW_NAME;
     }
 
-    @PostMapping(SETTINGS_ACCOUNT_VIEW_NAME)
+    @PostMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccount(@CurrentUser Account account,
                                 @Valid @ModelAttribute NicknameForm nicknameForm,
                                 Errors errors, Model model, RedirectAttributes attributes) {
