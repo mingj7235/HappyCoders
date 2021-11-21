@@ -6,8 +6,11 @@ import com.happycoders.account.AccountRepository;
 import com.happycoders.account.AccountService;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Tag;
+import com.happycoders.domain.Zone;
 import com.happycoders.settings.form.TagForm;
+import com.happycoders.settings.form.ZoneForm;
 import com.happycoders.tag.TagRepository;
+import com.happycoders.zone.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,30 +37,34 @@ class SettingsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     AccountService accountService;
-
     @Autowired
     AccountRepository accountRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     TagRepository tagRepository;
+    @Autowired
+    ZoneRepository zoneRepository;
+
+    private Zone testZone = Zone.builder()
+            .city("testCity")
+            .localNameOfCity("testLocalNameOfCity")
+            .province("testProvince")
+            .build();
 
     @BeforeEach
     void beforeEach() {
-
+        zoneRepository.save(testZone);
     }
 
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
+        zoneRepository.deleteAll();
     }
 
     @WithAccount(value = "minjae")
@@ -215,7 +222,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("닉네임 수정 폼")
     @Test
-    void account_form () throws Exception {
+    void account_form() throws Exception {
         mockMvc.perform(get("/" + SETTINGS + ACCOUNT))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
@@ -225,7 +232,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("닉네임 수정")
     @Test
-    void updateAccount () throws Exception {
+    void updateAccount() throws Exception {
         Account account = accountRepository.findByNickname("minjae");
 
         assertEquals("minjae", account.getNickname());
@@ -244,7 +251,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("알림 설정 수정 폼")
     @Test
-    void Notifications_Form () throws Exception{
+    void Notifications_Form() throws Exception {
         mockMvc.perform(get("/" + SETTINGS + NOTIFICATIONS))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
@@ -254,7 +261,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("알림 설정 수정")
     @Test
-    void updateNotifications () throws Exception {
+    void updateNotifications() throws Exception {
 
         Account account = accountRepository.findByNickname("minjae");
         assertTrue(account.isStudyUpdatedByWeb());
@@ -265,14 +272,14 @@ class SettingsControllerTest {
         assertFalse(account.isStudyEnrollmentResultByEmail());
 
         mockMvc.perform(post("/" + SETTINGS + NOTIFICATIONS)
-                .param("studyUpdatedByWeb", "false")
-                .param("studyCreatedByWeb", "false")
-                .param("studyEnrollmentResultByWeb", "false")
-                .param("studyUpdatedByEmail", "true")
-                .param("studyCreatedByEmail", "true")
-                .param("studyEnrollmentResultByEmail", "true")
-                .with(csrf())
-        )
+                        .param("studyUpdatedByWeb", "false")
+                        .param("studyCreatedByWeb", "false")
+                        .param("studyEnrollmentResultByWeb", "false")
+                        .param("studyUpdatedByEmail", "true")
+                        .param("studyCreatedByEmail", "true")
+                        .param("studyEnrollmentResultByEmail", "true")
+                        .with(csrf())
+                )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/" + SETTINGS + NOTIFICATIONS))
                 .andExpect(flash().attributeExists("message"));
@@ -284,5 +291,60 @@ class SettingsControllerTest {
         assertTrue(account.isStudyCreatedByEmail());
         assertTrue(account.isStudyEnrollmentResultByEmail());
     }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("지역 정보 수정 폼")
+    @Test
+    void zones_form() throws Exception {
+        mockMvc.perform(get(ROOT + SETTINGS + ZONES))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SETTINGS + ZONES))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("zones"))
+                .andExpect(model().attributeExists("whiteList"));
+    }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("지역 정보 추가")
+    @Test
+    void addZone() throws Exception {
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf())
+        )
+                .andExpect(status().isOk());
+
+        Account minjae = accountRepository.findByNickname("minjae");
+        Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
+        assertTrue(minjae.getZones().contains(zone));
+    }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("지역 정보 삭제")
+    @Test
+    void removeZone () throws Exception {
+        Account minjae = accountRepository.findByNickname("minjae");
+        Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
+        accountService.addZone(minjae, zone);
+
+        assertTrue(minjae.getZones().contains(zone));
+
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf())
+        )
+                .andExpect(status().isOk());
+
+        assertFalse(minjae.getZones().contains(zone));
+    }
+
 
 }

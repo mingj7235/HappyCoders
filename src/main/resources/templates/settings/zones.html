@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div id="whitelist" th:text="${whiteList}" hidden></div>
-                    <input id="zones" type="text" name="zones" th:value="${#strings.listJoin(zones ,',')}"
+                    <input id="zones" type="text" name="zones" th:value="${#strings.listJoin(zones,',')}"
                            class="tagify-outside" aria-describedby="tagHelp" />
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 contentType: "application/json; charset=utf-8",
                 method: "POST",
                 url: "/settings/zones" + url,
-                data: JSON.stringify({'zoneName' : zoneName}) // 보낼 데이터 -> json형태로 body에 실어서 보냄
+                data: JSON.stringify({'zoneName': zoneName}) // 보낼 데이터 -> json형태로 body에 실어서 보냄
             }).done (function (data, status) {
                 console.log("${data} and status is ${status}");
             }) ;
@@ -65,7 +65,7 @@
         var zoneInput = document.querySelector("#zones");
 
         var tagify = new Tagify (zoneInput, {
-            pattern : /^.{0,20}$/,
+            enforceWhitelist: true,
             whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
             dropdown : {
                 enabled: 1,
