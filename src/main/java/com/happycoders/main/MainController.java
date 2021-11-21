@@ -1,6 +1,6 @@
 package com.happycoders.main;
 
-import com.happycoders.account.CurrentUser;
+import com.happycoders.account.CurrentAccount;
 import com.happycoders.domain.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ public class MainController {
     /**
      * @CurrentUser : 이 어노테이션이 붙은 파라미터가 'anonymousUser'라면 null값을 뱉고, 아니라면 account를 뱉는다.
      */
-    public String home (@CurrentUser Account account, Model model) {
+    public String home (@CurrentAccount Account account, Model model) {
         if (account != null) {
             model.addAttribute(account);
             log.info("가입 직후 ");

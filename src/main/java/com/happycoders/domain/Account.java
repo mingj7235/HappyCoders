@@ -13,6 +13,7 @@ import java.util.UUID;
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 
+
     @Id @GeneratedValue
     private Long id;
 
@@ -38,14 +39,14 @@ public class Account {
     //자기소개글
 
     private String bio;
+
     //개인 웹사이트 주소
-
     private String url;
+
     //직업
-
     private String occupation;
-    //사는 지역
 
+    //사는 지역
     private String location; // varchar(255)
 
     @Lob @Basic (fetch = FetchType.EAGER)
@@ -65,6 +66,9 @@ public class Account {
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
+
+    @ManyToMany
+    private Set<Zone> zones = new HashSet<>();
 
     public void generateEmailCheckToken() {
         //email token을 UUID로 random하게 한다.

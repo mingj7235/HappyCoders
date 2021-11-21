@@ -3,6 +3,7 @@ package com.happycoders.account;
 import com.happycoders.account.form.SignUpForm;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Tag;
+import com.happycoders.domain.Zone;
 import com.happycoders.settings.form.Notifications;
 import com.happycoders.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -151,4 +152,10 @@ public class AccountService implements UserDetailsService {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().remove(tag));
     }
+
+    public Set<Zone> getZones(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getZones();
+    }
+
 }
