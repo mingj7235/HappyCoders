@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -24,16 +27,28 @@ public class ZoneService {
     public void initZoneDate () throws IOException {
         if (zoneRepository.count() == 0) {
             Resource resource = new ClassPathResource("zones_kr.csv");
-            List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream() // csv파일에 있는 정보를 한 줄 씩 읽어온다.
-                    .map(line -> {
-                        String[] split = line.split(",");
-                        return Zone.builder()
-                                .city(split[0])
-                                .localNameOFCity(split[1])
-                                .province(split[2])
-                                .build();
-                    }).collect(Collectors.toList());
-            zoneRepository.saveAll(zoneList);
+//            List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream() // csv파일에 있는 정보를 한 줄 씩 읽어온다.
+//                    .map(line -> {
+//                        String[] split = line.split(",");
+//                        return Zone.builder()
+//                                .city(split[0])
+//                                .localNameOfCity(split[1])
+//                                .province(split[2])
+//                                .build();
+//                    }).collect(Collectors.toList());
+
+            InputStream zonesInputStream = resource.getInputStream();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(zonesInputStream))) {
+                List<Zone> zoneList = reader.lines().map(line -> {
+                    String[] split = line.split(",");
+                    return Zone.builder()
+                            .city(split[0])
+                            .localNameOfCity(split[1])
+                            .province(split[2])
+                            .build();
+                }).collect(Collectors.toList());
+                zoneRepository.saveAll(zoneList);
+            }
         }
     }
 }
