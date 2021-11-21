@@ -212,6 +212,35 @@ class SettingsControllerTest {
     // TODO : 닉네임 테스트 코드 만들기
 
     @WithAccount(value = "minjae")
+    @DisplayName("닉네임 수정 폼")
+    @Test
+    void account_form () throws Exception {
+        mockMvc.perform(get(SettingsController.SETTINGS_ACCOUNT_URL))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("nicknameForm"));
+    }
+
+    @WithAccount(value = "minjae")
+    @DisplayName("닉네임 수정")
+    @Test
+    void updateAccount () throws Exception {
+        Account account = accountRepository.findByNickname("minjae");
+
+        assertEquals("minjae", account.getNickname());
+
+//        mockMvc.perform(post(SettingsController.SETTINGS_ACCOUNT_URL)
+//                .param("nickname", "updateNickname")
+//                .with(csrf())
+//        )
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl(SettingsController.SETTINGS_ACCOUNT_URL))
+//                .andExpect(model().attributeExists("message"));
+//
+//        assertEquals("updateNickname", account.getNickname());
+    }
+
+    @WithAccount(value = "minjae")
     @DisplayName("알림 설정 수정 폼")
     @Test
     void Notifications_Form () throws Exception{
