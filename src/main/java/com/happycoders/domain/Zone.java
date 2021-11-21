@@ -21,7 +21,7 @@ public class Zone {
     private String city;
 
     @Column (nullable = false)
-    private String localNameOFCity;
+    private String localNameOfCity;
 
     @Column (nullable = true)
     private String province;

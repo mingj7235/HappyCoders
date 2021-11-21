@@ -254,7 +254,13 @@ public class SettingsController {
     @PostMapping (SETTINGS + ZONES + "/add")
     @ResponseBody
     public ResponseEntity addZone (@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
 
+        if (zone == null)
+            return ResponseEntity.badRequest().build();
+
+        accountService.addZone (account, zone);
+        return ResponseEntity.ok().build();
     }
 
 

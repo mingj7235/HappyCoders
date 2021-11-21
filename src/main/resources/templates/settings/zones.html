@@ -11,7 +11,7 @@
         </div>
         <div class="col-8">
             <div class="row">
-                <h2 class="col-sm-12">관심 있는 스터디 주제</h2>
+                <h2 class="col-sm-12"> 주요 활동 지역 설정 </h2>
             </div>
             <div class="row">
                 <div class="col-sm-12">
@@ -62,9 +62,9 @@
             zoneRequest("/remove", e.detail.data.value);
         }
 
-        var tagInput = document.querySelector("#zones");
+        var zoneInput = document.querySelector("#zones");
 
-        var tagify = new Tagify (tagInput, { //tagify 적용 (tagInput에 적용한다)
+        var tagify = new Tagify (zoneInput, {
             pattern : /^.{0,20}$/,
             whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
             dropdown : {
