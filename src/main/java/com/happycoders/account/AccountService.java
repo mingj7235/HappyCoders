@@ -4,12 +4,14 @@ import com.happycoders.account.form.SignUpForm;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Tag;
 import com.happycoders.domain.Zone;
+import com.happycoders.mail.EmailMessage;
+import com.happycoders.mail.EmailService;
 import com.happycoders.settings.form.Notifications;
 import com.happycoders.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -25,14 +27,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+
+    private final EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final ModelMapper modelMapper;
 
     /**
@@ -42,7 +48,7 @@ public class AccountService implements UserDetailsService {
      * 그렇게된다면 newAccount 객체는 계속 persist 객체가 되고, DB와 계속 싱크가 되어준다.
      */
 
-    public Account processNewAccount (SignUpForm signUpForm) {
+    public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
@@ -57,12 +63,14 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendSignUpConfirmEmail(Account newAccount) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("해피코더스, 회원 가입 인증"); //메일 제목
-        mailMessage.setText("/check-email-token?token="+ newAccount.getEmailCheckToken() +
-                "&email=" + newAccount.getEmail()); //메일 본문
-        javaMailSender.send(mailMessage);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("해피코더스, 회원 가입 인증")
+                .message("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+                        "&email=" + newAccount.getEmail())
+                .build();
+
+        emailService.sendEmail(emailMessage);
     }
 
     public void login(Account account) {
@@ -70,8 +78,8 @@ public class AccountService implements UserDetailsService {
                 new UserAccount(account),
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))); //정석적으로 사용하는 방법은 아니지만 이렇게 사용하는게 간편하기도함
-                // 왜이렇게 진행하는가? password를 인코딩된 것만 접근 가능하기때문에 (plain password에 접근할 수 없다.)
-                // 정석적인 방법을 하려면 plain password 를 알아야한다.
+        // 왜이렇게 진행하는가? password를 인코딩된 것만 접근 가능하기때문에 (plain password에 접근할 수 없다.)
+        // 정석적인 방법을 하려면 plain password 를 알아야한다.
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(token);
 
@@ -85,7 +93,7 @@ public class AccountService implements UserDetailsService {
 
     }
 
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickName) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickName);
@@ -130,11 +138,13 @@ public class AccountService implements UserDetailsService {
 
     public void sendLoginLink(Account account) {
         account.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(account.getEmail());
-        mailMessage.setSubject("HAPPY CODERS 로그인 링크");
-        mailMessage.setText("로그인 링크 : /login- by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
-        javaMailSender.send(mailMessage);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("HAPPY CODERS 로그인 링크")
+                .message("/login- by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail())
+                .build();
+
+        emailService.sendEmail(emailMessage);
     }
 
     public Set<Tag> getTags(Account account) {
