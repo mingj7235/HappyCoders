@@ -1,6 +1,7 @@
 package com.happycoders.account;
 
 import com.happycoders.account.form.SignUpForm;
+import com.happycoders.config.AppProperties;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Tag;
 import com.happycoders.domain.Zone;
@@ -22,6 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +43,10 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
+
+    private final TemplateEngine templateEngine;
+
+    private final AppProperties appProperties;
 
     /**
      * saveNewAccount 에서 account는 builder를 통해 생성되고 JPA의 save를 통해 저장되었다.
@@ -63,11 +70,20 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendSignUpConfirmEmail(Account newAccount) {
+        Context context = new Context(); // model 이라고 생각하면 된다. thymeleaf가 제공
+        context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() +
+                "&email=" + newAccount.getEmail());
+        context.setVariable("nickname", newAccount.getNickname());
+        context.setVariable("linkName", "이메일 인증하기");
+        context.setVariable("message", "HAPPY CODERS 서비스를 사용하려면 링크를 클릭하세요.");
+        context.setVariable("host", appProperties.getHost());
+
+        String message = templateEngine.process("mail/simple-link", context);
+
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
                 .subject("해피코더스, 회원 가입 인증")
-                .message("/check-email-token?token=" + newAccount.getEmailCheckToken() +
-                        "&email=" + newAccount.getEmail())
+                .message(message)
                 .build();
 
         emailService.sendEmail(emailMessage);
@@ -137,11 +153,19 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendLoginLink(Account account) {
+        Context context = new Context(); // model 이라고 생각하면 된다. thymeleaf가 제공
+        context.setVariable("link", "/login- by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        context.setVariable("nickname", account.getNickname());
+        context.setVariable("linkName", "HAPPY CODERS 로그인 링크");
+        context.setVariable("message", "HAPPY CODERS에 로그인하려면 링크를 클릭하세요.");
+        context.setVariable("host", appProperties.getHost());
+
+        String message = templateEngine.process("mail/simple-link", context);
         account.generateEmailCheckToken();
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getEmail())
                 .subject("HAPPY CODERS 로그인 링크")
-                .message("/login- by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail())
+                .message(message)
                 .build();
 
         emailService.sendEmail(emailMessage);
