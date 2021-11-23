@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
 
 //local 환경에서는 console에서 mail을 출력할 수 있도록 사용
-@Profile("local") //local일때만 등록해서 사용
+@Profile({"local", "dev"}) //local일때만 등록해서 사용
 @Component
 @Slf4j
 public class ConsoleMailSender implements JavaMailSender {
