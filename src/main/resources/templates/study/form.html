@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>스터디 개설</h2>
+    </div>
+    <div class="row justify-content-center">
+        <form class="need-validation col-sm-10" th:action="@{/new-study}" th:object="${studyForm}" method="post" novalidate>
+            <div class="form-group">
+                <label for="path">스터디 URL</label>
+                <input id="path" type="text" th:field="*{path}" class="form-control"
+                        placeholder="예) study-path" aria-describedby="pathHelp" required>
+                <small id="pathHelp" class="form-text text-muted">
+                    <span>공백없이 문자, 숫자, 대시(-)와 언더바(_)만 3자 이상 20자 이내로 입력하세요. 스터디 홈 주소에 사용됩니다.</span>
+                    <span>예) /study/<b>study-path</b></span>
+                </small>
+                <small class="invalid-feedback">스터디 경로를 입력하세요.</small>
+                <small class="form-text text-danger" th:if></small>
+            </div>
+        </form>
+    </div>
+    <div th:replace="fragments.html :: footer"></div>
+    <script th:replace="fragments.html :: form-validation"></script>
+</body>
+</html>
