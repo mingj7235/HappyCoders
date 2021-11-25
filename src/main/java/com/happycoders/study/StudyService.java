@@ -4,8 +4,10 @@ import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class StudyService {
 
