@@ -23,6 +23,8 @@ import java.nio.charset.StandardCharsets;
 @Controller
 public class StudyController {
 
+    private final StudyRepository studyRepository;
+
     private final StudyService studyService;
 
     private final ModelMapper modelMapper;
@@ -49,16 +51,24 @@ public class StudyController {
 
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
-
     }
 
-    @GetMapping ("/study")
-    public String getStudy (@CurrentAccount Account account,
-                            @Valid StudyForm studyForm,
-                            Model model,
-                            @RequestParam String path) {
+    @GetMapping ("/study/{path}")
+    public String viewStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new StudyForm());
-        return "study/" + path;
+        model.addAttribute(studyRepository.findByPath(path));
+        return "study/view";
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+

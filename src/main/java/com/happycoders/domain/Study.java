@@ -65,4 +65,6 @@ public class Study {
         this.managers.add(account);
     }
 
+
+
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+
+<div class="row" id="study-logo" th:if="${study.useBanner}">
+    <img th:src="${study.image}">
+</div>
+
+<div class="container">
+    <div class="row pt-4 text-left justify-content-center bg-light">
+        <div class="col-6">
+            <a class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
+                <span class="h2" th:text="${study.title}">스터디 이름</span>
+            </a>
+        </div>
+        <div class="col-4 text-right justify-content-end">
+            <span class="d-inline-block" data-placement="bottom" data-toggle="tooltip" tabindex="0"
+                  th:if="${!study.published}" title="스터디 공개 준비중">
+                <button class="btn btn-primary btn-sm" disabled style="pointer-events: none;"
+                        type="button">DRAFT</button>
+            </span>
+
+            <span class="d-inline-block" data-placement="bottom" data-toggle="tooltip" tabindex="0"
+                  th:if="${study.closed}" title="스터디 종료함">
+                    <button class="btn btn-primary btn-sm" disabled style="pointer-events: none;"
+                            type="button">CLOSED</button>
+            </span>
+
+            <span class="d-inline-block ml-1" data-placement="bottom" data-toggle="tooltip" tabindex="0"
+                  th:if="${!study.recruiting}" title="팀원 모집중 아님">
+                <button class="btn btn-primary btn-sm" disabled style="pointer-events: none;" type="button">OFF</button>
+            </span>
+
+            <span aria-label="Basic example" class="btn-group"
+                  role="group" sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}">
+                <a class="btn btn-primary" th:href="@{'/study/'+ ${study.path} + '/join'}">
+                    스터디 가입
+                </a>
+                <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
+                   th:text="${study.members.size()}">1</a>
+            </span>
+
+            <span class="btn-group"
+                  role="group" sec:authorize="isAuthenticated()" th:if="${!study.closed && study.isMember(#authentication.principal)}">
+                <a class="btn btn-outline-warning" th:href="@{'/study/' + ${study.path} + '/leave'}">스터디 탈퇴</a>
+                <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
+                   th:text="${study.members.size()}">1</a>
+            </span>
+
+            <span sec:authorize="isAuthenticated()"
+                  th:if="${study.published && !study.closed && study.isManager(#authentication.principal)}">
+                <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/new-event'}">
+                    <i class="fa fa-plus"></i> 모임 만들기
+                </a>
+            </span>
+
+        </div>
+    </div>
+
+
+    <div th:replace="fragments.html :: footer"></div>
+</div>
+</body>
+</html>
