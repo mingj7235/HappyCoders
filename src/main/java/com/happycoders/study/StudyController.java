@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.lang.model.element.ModuleElement;
+import javax.print.MultiDoc;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -50,5 +50,15 @@ public class StudyController {
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
 
+    }
+
+    @GetMapping ("/study")
+    public String getStudy (@CurrentAccount Account account,
+                            @Valid StudyForm studyForm,
+                            Model model,
+                            @RequestParam String path) {
+        model.addAttribute(account);
+        model.addAttribute(new StudyForm());
+        return "study/" + path;
     }
 }
