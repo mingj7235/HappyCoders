@@ -16,7 +16,7 @@ public class StudyService {
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
-        return null;
+        return newStudy;
     }
 
 }

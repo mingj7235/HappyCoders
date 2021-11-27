@@ -59,12 +59,35 @@
                     <i class="fa fa-plus"></i> 모임 만들기
                 </a>
             </span>
-
         </div>
     </div>
-
-
+    <div class="row justify-content-center bg-light">
+        <div class="col-10">
+            <p class="lead" th:text="${study.shortDescription}"></p>
+        </div>
+    </div>
+    <div class="row justify-content-center bg-light">
+        <div class="col-10">
+            <p>
+                <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                        <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                    </a>
+                </span>
+                <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                        <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
+                    </a>
+                </span>
+            </p>
+        </div>
+    </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
+<script type="application/javascript">
+    $(function (){
+        $('[data-toggle="tooltip"]').tooltip() //bootstrap 이 지원하는 tooltip() 메소드
+    })
+</script>
 </body>
 </html>
