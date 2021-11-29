@@ -60,6 +60,13 @@ public class StudyController {
         return "study/view";
     }
 
+    @GetMapping ("/study/{path}/members")
+    public String viewStudyMembers (@CurrentAccount Account account, @PathVariable String path, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(studyRepository.findByPath(path));
+        return "study/members";
+    }
+
 }
 
 
