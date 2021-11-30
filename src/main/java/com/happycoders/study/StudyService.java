@@ -2,6 +2,7 @@ package com.happycoders.study;
 
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
+import com.happycoders.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
@@ -40,6 +41,7 @@ public class StudyService {
     }
 
     public void updateStudyDescription (Study study, StudyDescriptionForm studyDescriptionForm) {
+        // 한 transaction 안에서 이루어지므로, 데이터가 변경된다. form 에 있는 데이터가 entity인 study로 modelmapper를 통해 변경!
         modelMapper.map(studyDescriptionForm, study);
     }
 
