@@ -38,15 +38,16 @@
                     <small class="invalid-feedback">상세 소개를 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}"></small>
                 </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit"
+                            aria-describedby="submitHelp">수정하기</button>
+                </div>
             </form>
         </div>
     </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
-<script type="application/javascript">
-    $(function (){
-        $('[data-toggle="tooltip"]').tooltip() //bootstrap 이 지원하는 tooltip() 메소드
-    })
-</script>
+<script th:replace="fragments.html :: form-validation"></script>
+<script th:replace="fragments.html :: editor-script"></script>
 </body>
 </html>
