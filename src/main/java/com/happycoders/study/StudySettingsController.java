@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AccessDeniedException;
 
 @RequestMapping ("/study/{path}/settings")
 @RequiredArgsConstructor
