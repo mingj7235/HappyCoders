@@ -13,22 +13,23 @@ import java.time.LocalDateTime;
  * JDBCTokenRepository에 mapping을 하기위해 만들어 주는 것 (로그인 유지를 하기위해서다)
  */
 
-@Table (name = "persistent_logins")
+@Table(name = "persistent_logins")
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class PersistentLogins {
 
     @Id
-    @Column (length = 64)
+    @Column(length = 64)
     private String series;
 
-    @Column (nullable = false, length = 64)
+    @Column(nullable = false, length = 64)
     private String username;
 
-    @Column (nullable = false, length = 64)
+    @Column(nullable = false, length = 64)
     private String token;
 
-    @Column (name = "last_used", nullable = false, length = 64)
+    @Column(name = "last_used", nullable = false, length = 64)
     private LocalDateTime lastUsed;
 
 }

@@ -9,18 +9,23 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode (of = "id") // entity 들이 순환참조할때 stack over flow가 생길 수 있으므로 EqualsAndHashCode는 id만 사용함
-@Builder @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id") // entity 들이 순환참조할때 stack over flow가 생길 수 있으므로 EqualsAndHashCode는 id만 사용함
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
 
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
-    @Column (unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column (unique = true)
+    @Column(unique = true)
     private String nickname;
 
     private String password;
@@ -49,7 +54,8 @@ public class Account {
     //사는 지역
     private String location; // varchar(255)
 
-    @Lob @Basic (fetch = FetchType.EAGER)
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String profileImage; // varchar (255)보다 커야하므로 lob으로
 
     private boolean studyCreatedByEmail;

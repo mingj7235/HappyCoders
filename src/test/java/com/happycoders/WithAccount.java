@@ -9,5 +9,6 @@ import java.lang.annotation.RetentionPolicy;
 @WithSecurityContext(factory = WithAccountSecurityContextFactory.class)
 public @interface WithAccount {
 
-    String value ();
+    String value();
+
 }

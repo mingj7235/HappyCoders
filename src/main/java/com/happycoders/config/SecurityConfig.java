@@ -21,15 +21,15 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //UserDetails를 구현한 accountService 객체를 불러와준다. -> rememberme 에서 사용하기 위함
-     private final AccountService accountService;
+    private final AccountService accountService;
 
-     private final DataSource dataSource;
+    private final DataSource dataSource;
 
     //WebSecurity Configurer Adapter에서 overriding하면된다.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/","/login", "/sign-up", "/check-email-token",
+                .mvcMatchers("/", "/login", "/sign-up", "/check-email-token",
                         "/email-login", "/login-by-email").permitAll() //Get이든 Post든 모든 요청은 permitAll. 즉, 인증없이 권한없어도 들어올수있다.
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll() // profile 요청은 Get 요청만 모두에게 열려있음
                 .anyRequest().authenticated(); //나머지요청은 로그인을 해야지 볼수있다.
@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PersistentTokenRepository tokenRepository () {
+    public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;

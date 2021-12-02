@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@NamedEntityGraph (name = "Study.withAll", attributeNodes = {
+@NamedEntityGraph(name = "Study.withAll", attributeNodes = {
         @NamedAttributeNode("tags"),
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers"),
@@ -71,16 +71,16 @@ public class Study {
         this.managers.add(account);
     }
 
-    public boolean isJoinable (UserAccount userAccount) {
+    public boolean isJoinable(UserAccount userAccount) {
         Account account = userAccount.getAccount();
         return this.isPublished() && this.isRecruiting() && !this.members.contains(account) && !this.managers.contains(account);
     }
 
-    public boolean isMember (UserAccount userAccount) {
+    public boolean isMember(UserAccount userAccount) {
         return this.members.contains(userAccount.getAccount());
     }
 
-    public boolean isManager (UserAccount userAccount) {
+    public boolean isManager(UserAccount userAccount) {
         return this.managers.contains(userAccount.getAccount());
     }
 

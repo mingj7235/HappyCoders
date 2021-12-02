@@ -19,16 +19,17 @@ import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@RequestMapping ("/study/{path}/settings")
+@RequestMapping("/study/{path}/settings")
 @RequiredArgsConstructor
 @Controller
 public class StudySettingsController {
 
     private final StudyService studyService;
+
     private final ModelMapper modelMapper;
 
-    @GetMapping ("/description")
-    public String viewStudySetting (@CurrentAccount Account account, @PathVariable String path, Model model) {
+    @GetMapping("/description")
+    public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
@@ -36,10 +37,10 @@ public class StudySettingsController {
         return "study/settings/description";
     }
 
-    @PostMapping ("/description")
-    public String updateStudyInfo (@CurrentAccount Account account, @PathVariable String path,
-                                   @Valid StudyDescriptionForm studyDescriptionForm, Errors errors,
-                                   Model model, RedirectAttributes attributes) {
+    @PostMapping("/description")
+    public String updateStudyInfo(@CurrentAccount Account account, @PathVariable String path,
+                                  @Valid StudyDescriptionForm studyDescriptionForm, Errors errors,
+                                  Model model, RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdate(account, path);
 
         if (errors.hasErrors()) {
@@ -54,7 +55,7 @@ public class StudySettingsController {
         return "redirect:/study/" + getPath(path) + "/settings/description";
     }
 
-    private String getPath (String path) {
+    private String getPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
 

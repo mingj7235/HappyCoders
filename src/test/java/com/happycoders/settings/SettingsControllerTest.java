@@ -37,16 +37,22 @@ class SettingsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
     @Autowired
     AccountService accountService;
+
     @Autowired
     AccountRepository accountRepository;
+
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
     TagRepository tagRepository;
+
     @Autowired
     ZoneRepository zoneRepository;
 
@@ -312,10 +318,10 @@ class SettingsControllerTest {
         zoneForm.setZoneName(testZone.toString());
 
         mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(zoneForm))
-                .with(csrf())
-        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(zoneForm))
+                        .with(csrf())
+                )
                 .andExpect(status().isOk());
 
         Account minjae = accountRepository.findByNickname("minjae");
@@ -326,7 +332,7 @@ class SettingsControllerTest {
     @WithAccount(value = "minjae")
     @DisplayName("지역 정보 삭제")
     @Test
-    void removeZone () throws Exception {
+    void removeZone() throws Exception {
         Account minjae = accountRepository.findByNickname("minjae");
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
         accountService.addZone(minjae, zone);
@@ -337,10 +343,10 @@ class SettingsControllerTest {
         zoneForm.setZoneName(testZone.toString());
 
         mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/remove")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(zoneForm))
-                .with(csrf())
-        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(zoneForm))
+                        .with(csrf())
+                )
                 .andExpect(status().isOk());
 
         assertFalse(minjae.getZones().contains(zone));

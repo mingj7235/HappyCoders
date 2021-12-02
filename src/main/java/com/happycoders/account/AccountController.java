@@ -106,13 +106,13 @@ public class AccountController {
         return "account/profile";
     }
 
-    @GetMapping ("/email-login")
-    public String emailLoginForm () {
+    @GetMapping("/email-login")
+    public String emailLoginForm() {
         return "account/email-login";
     }
 
-    @PostMapping ("/email-login")
-    public String sendEmailLoginLink (String email, Model model, RedirectAttributes attributes) {
+    @PostMapping("/email-login")
+    public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
         Account account = accountRepository.findByEmail(email);
 
         if (account == null) {
@@ -120,7 +120,7 @@ public class AccountController {
             return "account/email-login";
         }
 
-        if(!account.canSendConfirmEmail()) {
+        if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "이메일 로그인은 1시간 뒤에 사용할 수 있습니다.");
             return "account/email-login";
         }
@@ -130,8 +130,8 @@ public class AccountController {
         return "redirect:/email-login";
     }
 
-    @GetMapping ("login-by-email")
-    public String loginByEmail (String token, String email, Model model) {
+    @GetMapping("login-by-email")
+    public String loginByEmail(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
         if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인 할 수 없습니다.");

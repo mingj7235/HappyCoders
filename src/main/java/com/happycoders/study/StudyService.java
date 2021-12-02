@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+
     private final ModelMapper modelMapper;
 
     public Study createNewStudy(Study study, Account account) {
@@ -32,7 +33,7 @@ public class StudyService {
         return study;
     }
 
-    public Study getStudy (String path) {
+    public Study getStudy(String path) {
         Study study = this.studyRepository.findByPath(path);
         if (study == null) {
             throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
@@ -40,7 +41,7 @@ public class StudyService {
         return study;
     }
 
-    public void updateStudyDescription (Study study, StudyDescriptionForm studyDescriptionForm) {
+    public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
         // 한 transaction 안에서 이루어지므로, 데이터가 변경된다. form 에 있는 데이터가 entity인 study로 modelmapper를 통해 변경!
         modelMapper.map(studyDescriptionForm, study);
     }

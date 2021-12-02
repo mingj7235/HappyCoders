@@ -15,7 +15,7 @@ public class MainController {
     /**
      * @CurrentUser : 이 어노테이션이 붙은 파라미터가 'anonymousUser'라면 null값을 뱉고, 아니라면 account를 뱉는다.
      */
-    public String home (@CurrentAccount Account account, Model model) {
+    public String home(@CurrentAccount Account account, Model model) {
         if (account != null) {
             model.addAttribute(account);
             log.info("가입 직후 ");
@@ -26,8 +26,9 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping ("/login")
-    public String login () {
+    @GetMapping("/login")
+    public String login() {
         return "/login";
     }
+
 }
