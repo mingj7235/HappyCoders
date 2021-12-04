@@ -60,7 +60,7 @@ public class StudySettingsController {
         Study study = studyService.getStudyToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
-        return "/study/settings/banner";
+        return "study/settings/banner";
     }
 
     @PostMapping ("/banner")
