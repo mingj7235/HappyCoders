@@ -15,10 +15,6 @@
 
         <div th:replace="fragments.html :: footer"></div>
     </div>
-    <script type="application/javascript">
-        $(function (){
-            $('[data-toggle="tooltip"]').tooltip() //bootstrap 이 지원하는 tooltip() 메소드
-        })
-    </script>
+<script th:replace="fragments.html :: tootlip"></script>
 </body>
 </html>
