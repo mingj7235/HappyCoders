@@ -78,6 +78,13 @@ public class StudySettingsController {
         return "redirect:/study/" + getPath(path) + "/settings/banner";
     }
 
+    @PostMapping ("/banner/disable")
+    public String disableStudyBanner (@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.disableStudyBanner(study);
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
     private String getPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }

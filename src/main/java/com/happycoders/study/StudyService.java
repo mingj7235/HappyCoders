@@ -54,6 +54,10 @@ public class StudyService {
         study.setUseBanner(true);
     }
 
+    public void disableStudyBanner(Study study) {
+        study.setUseBanner(false);
+    }
+
 }
 
 
