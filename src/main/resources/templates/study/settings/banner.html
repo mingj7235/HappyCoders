@@ -41,11 +41,29 @@
                     <input id="studyImage" type="hidden" name="image" class="form-control" />
                 </div>
             </form>
+            <div class="card text-center">
+                <div id="current-study-image" class="mt-3">
+                    <img class="rounded" th:src="${study.image}" width="640" th:alt="${study.title} /">
+                </div>
+                <div id="new-study-image" class="mt-3"></div>
+                <div class="card-body">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="study-image-file">
+                        <label class="custom-file-label" for="study-image-file">스터디 이미지 변경</label>
+                    </div>
+                    <div id="new-study-image-control" class="mt-3">
+                        <button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
+                        <button class="btn btn-outline-success btn-block" id="confirm-button">확인</button>
+                        <button class="btn btn-primary btn-block" id="save-button">저장</button>
+                        <button class="btn btn-outline-warning btn-block" id="reset-button">취소</button>
+                    </div>
+                    <div id="cropeed-new-study-image" class="mt-3"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
-<script th:replace="fragments.html :: form-validation"></script>
-<script th:replace="fragments.html :: editor-script"></script>
+<script th:replace="fragments.html :: tooltip"></script>
 </body>
 </html>
