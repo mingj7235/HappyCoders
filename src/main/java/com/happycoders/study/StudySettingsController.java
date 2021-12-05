@@ -1,9 +1,14 @@
 package com.happycoders.study;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.happycoders.account.CurrentAccount;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
+import com.happycoders.domain.Tag;
 import com.happycoders.study.form.StudyDescriptionForm;
+import com.happycoders.tag.TagRepository;
+import com.happycoders.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -18,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/study/{path}/settings")
 @RequiredArgsConstructor
@@ -27,6 +34,12 @@ public class StudySettingsController {
     private final StudyService studyService;
 
     private final ModelMapper modelMapper;
+
+    private final TagService tagService;
+
+    private final TagRepository tagRepository;
+
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/description")
     public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
@@ -83,6 +96,21 @@ public class StudySettingsController {
         Study study = studyService.getStudyToUpdate(account, path);
         studyService.disableStudyBanner(study);
         return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
+    @GetMapping ("/tags")
+    public String studyTagForm (@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
+        Study study = studyService.getStudyToUpdate(account, path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+
+        model.addAttribute("tags", study.getTags().stream().map(Tag::getTitle).collect(Collectors.toList()));
+
+        List<String> allTagTitles = tagRepository.findAll().stream()
+                .map(Tag::getTitle).collect(Collectors.toList());
+
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTagTitles));
+        return "study/settings/tags";
     }
 
     private String getPath(String path) {

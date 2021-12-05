@@ -208,6 +208,8 @@ public class SettingsController {
     @PostMapping(TAGS + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
+
+
         String title = tagForm.getTagTitle();
 //        Tag tag = tagRepository.findByTitle(title)
 //                .orElseGet(() -> tagRepository.save(Tag.builder()
