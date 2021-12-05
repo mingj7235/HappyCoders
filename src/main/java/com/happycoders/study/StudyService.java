@@ -3,6 +3,7 @@ package com.happycoders.study;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
 import com.happycoders.domain.Tag;
+import com.happycoders.domain.Zone;
 import com.happycoders.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -65,6 +66,14 @@ public class StudyService {
 
     public void removeTag(Study study, Tag tag) {
         study.getTags().remove(tag);
+    }
+
+    public void addZone(Study study, Zone zone) {
+        study.getZones().add(zone)
+    }
+
+    public void removeZone(Study study, Zone zone) {
+        study.getZones().remove(zone);
     }
 
 }
