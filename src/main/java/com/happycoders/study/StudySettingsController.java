@@ -120,7 +120,7 @@ public class StudySettingsController {
     @PostMapping ("/tags/add")
     @ResponseBody
     public ResponseEntity addTag (@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
-        Study study = studyService.getStudyToUpdate(account, path);
+        Study study = studyService.getStudyToUpdateTag(account, path);
         Tag tag = tagService.findOrCreate(tagForm.getTagTitle());
         studyService.addTag (study, tag);
         return ResponseEntity.ok().build();
@@ -129,7 +129,7 @@ public class StudySettingsController {
     @PostMapping ("/tags/remove")
     @ResponseBody
     public ResponseEntity removeTag (@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
-        Study study = studyService.getStudyToUpdate(account, path);
+        Study study = studyService.getStudyToUpdateTag(account, path);
         Tag tag = tagService.findOrCreate(tagForm.getTagTitle());
         if (tag == null) {
             return ResponseEntity.badRequest().build();
