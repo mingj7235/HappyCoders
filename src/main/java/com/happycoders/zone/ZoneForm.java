@@ -1,4 +1,4 @@
-package com.happycoders.settings.form;
+package com.happycoders.zone;
 
 import com.happycoders.domain.Zone;
 import lombok.Data;

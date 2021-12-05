@@ -1,4 +1,4 @@
-package com.happycoders.settings.form;
+package com.happycoders.tag;
 
 import lombok.Data;
 

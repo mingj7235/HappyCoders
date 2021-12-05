@@ -2,6 +2,7 @@ package com.happycoders.study;
 
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
+import com.happycoders.domain.Tag;
 import com.happycoders.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -56,6 +57,14 @@ public class StudyService {
 
     public void disableStudyBanner(Study study) {
         study.setUseBanner(false);
+    }
+
+    public void addTag(Study study, Tag tag) {
+        study.getTags().add(tag);
+    }
+
+    public void removeTag(Study study, Tag tag) {
+        study.getTags().remove(tag);
     }
 
 }

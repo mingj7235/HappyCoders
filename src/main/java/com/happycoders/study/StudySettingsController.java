@@ -6,18 +6,17 @@ import com.happycoders.account.CurrentAccount;
 import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
 import com.happycoders.domain.Tag;
+import com.happycoders.tag.TagForm;
 import com.happycoders.study.form.StudyDescriptionForm;
 import com.happycoders.tag.TagRepository;
 import com.happycoders.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -111,6 +110,27 @@ public class StudySettingsController {
 
         model.addAttribute("whitelist", objectMapper.writeValueAsString(allTagTitles));
         return "study/settings/tags";
+    }
+
+    @PostMapping ("/tags/add")
+    @ResponseBody
+    public ResponseEntity addTag (@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        Tag tag = tagService.findOrCreate(tagForm.getTagTitle());
+        studyService.addTag (study, tag);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping ("/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTag (@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        Tag tag = tagService.findOrCreate(tagForm.getTagTitle());
+        if (tag == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        studyService.removeTag(study, tag);
+        return ResponseEntity.ok().build();
     }
 
     private String getPath(String path) {
