@@ -15,6 +15,12 @@ spring:
         globally_quoted_identifiers: true
       use_sql_comments: true
     open-in-view: false
+
+#톰캣 기본 요청 사이즈는 2MB인데, 5MB로 늘림
+server:
+  tomcat:
+    max-http-form-post-size: 5MB
+
 app:
   host: http://localhost:8080
 

@@ -129,11 +129,15 @@
                 const reader = new FileReader(); //FileReader() : JS에서 File을 읽어올 수 있는 라이브러리
                 reader.onload = e => { // 파일을 읽어온다. 파일이 onload 상태 즉, 읽어와진 상태가 된것이다.
                     if (e.target.result) { //파일을 이미 가져왔다. if문에 넣어서 '파일이 있다면' 이라는 의미
+                        if (!target.result.startsWith("data:image")) { //이미지 파일인지 아닌지를 걸러냄
+                            alert("이미지 파일을 선택하세요.");
+                            return;
+                        }
                         let img = document.createElement("img"); // document에 img 태그를 만든다.
                         //img 태그의 attribute를 채워 넣는 작업
                         img.id = 'new-profile';
                         img.src = e.target.result;
-                        img.width = 250;
+                        img.setAttribute('width', '100%');
 
                         $newProfileImage.html(img); //newProfileImage에 위에서 정의한 img 태그를 채워 넣는 작업
                         $newProfileImage.show();
