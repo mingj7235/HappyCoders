@@ -12,6 +12,7 @@ import com.happycoders.settings.validator.NicknameValidator;
 import com.happycoders.settings.validator.PasswordFormValidator;
 import com.happycoders.tag.TagForm;
 import com.happycoders.tag.TagRepository;
+import com.happycoders.tag.TagService;
 import com.happycoders.zone.ZoneForm;
 import com.happycoders.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,8 @@ public class SettingsController {
     private final ObjectMapper objectMapper;
 
     private final NicknameValidator nicknameValidator;
+
+    private final TagService tagService;
 
     private final TagRepository tagRepository;
 
@@ -210,17 +213,7 @@ public class SettingsController {
     @PostMapping(TAGS + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
-
-
-        String title = tagForm.getTagTitle();
-//        Tag tag = tagRepository.findByTitle(title)
-//                .orElseGet(() -> tagRepository.save(Tag.builder()
-//                .title(tagForm.getTagTitle())
-//                .build()));
-        Tag tag = tagRepository.findByTitle(title);
-        if (tag == null) {
-            tag = tagRepository.save(Tag.builder().title(title).build());
-        }
+        Tag tag = tagService.findOrCreate(tagForm.getTagTitle());
         accountService.addTag(account, tag);
         return ResponseEntity.ok().build();
     }
@@ -228,11 +221,7 @@ public class SettingsController {
     @PostMapping(TAGS + "/remove")
     @ResponseBody
     public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-        Tag tag = tagRepository.findByTitle(title);
-        if (tag == null) {
-            return ResponseEntity.badRequest().build();
-        }
+        Tag tag = tagService.findOrCreate(tagForm.getTagTitle());
         accountService.removeTag(account, tag);
         return ResponseEntity.ok().build();
     }

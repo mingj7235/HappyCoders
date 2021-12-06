@@ -85,7 +85,10 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        studyRepository.findAccountWithTagsByPath(path);
+        Study study = studyRepository.findAccountWithTagsByPath(path);
+        checkIfExistStudy(study, path);
+        checkIfManger(account, study);
+        return study;
     }
 
 }
