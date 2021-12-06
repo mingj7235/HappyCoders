@@ -72,23 +72,30 @@ public class StudyService {
         study.getZones().remove(zone);
     }
 
-    private void checkIfManger (Account account, Study study) {
-        if (!account.isManagerOf(study)) {
-            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
-        }
-    }
-
-    private void checkIfExistStudy (Study study, String path) {
-        if (study == null) {
-            throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
-        }
-    }
-
     public Study getStudyToUpdateTag(Account account, String path) {
         Study study = studyRepository.findAccountWithTagsByPath(path);
         checkIfExistStudy(study, path);
         checkIfManger(account, study);
         return study;
+    }
+
+    public Study getStudyToUpdateZone (Account account, String path) {
+        Study study = studyRepository.findAccountWithZonesByPath(path);
+        checkIfExistStudy(study, path);
+        checkIfManger(account, study);
+        return study;
+    }
+
+    private void checkIfManger(Account account, Study study) {
+        if (!account.isManagerOf(study)) {
+            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
+    }
+
+    private void checkIfExistStudy(Study study, String path) {
+        if (study == null) {
+            throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
+        }
     }
 
 }

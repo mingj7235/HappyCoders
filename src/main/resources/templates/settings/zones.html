@@ -34,53 +34,7 @@
         </div>
     </div>
 </div>
-<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
-<!--CSRF token 을 주기위한 JS-->
-<script th:replace="fragments.html::ajax-csrf-header"></script>
-<script type="application/javascript">
-    $(function () {
-        function zoneRequest (url, zoneName) {
-            $.ajax({
-                dataType : "json",
-                autocomplete : {
-                    enabled : true,
-                    rightKey : true,
-                },
-                contentType: "application/json; charset=utf-8",
-                method: "POST",
-                url: "/settings/zones" + url,
-                data: JSON.stringify({'zoneName': zoneName}) // 보낼 데이터 -> json형태로 body에 실어서 보냄
-            }).done (function (data, status) {
-                console.log("${data} and status is ${status}");
-            }) ;
-        }
-        function onAdd (e) {
-            zoneRequest("/add", e.detail.data.value);
-        }
-
-        function onRemove (e) {
-            zoneRequest("/remove", e.detail.data.value);
-        }
-
-        var zoneInput = document.querySelector("#zones");
-
-        var tagify = new Tagify (zoneInput, {
-            enforceWhitelist: true,
-            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
-            dropdown : {
-                enabled: 1,
-            }
-        });
-
-        tagify.on("add", onAdd);
-        tagify.on("remove", onRemove);
-
-        //yaireo.github.io/tagify/ 의 예제 복사 (#Outside-Of-The-Box)
-
-        tagify.DOM.input.classList.add('form-control');
-        tagify.DOM.scope.parantNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
-    });
-</script>
-
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script th:replace="fragments.html :: update-zones(baseUrl='/settings/zones')"></script>
 </body>
 </html>
