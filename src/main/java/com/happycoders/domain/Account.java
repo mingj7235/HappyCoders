@@ -8,6 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@NamedEntityGraph (name = "Account.withTags", attributeNodes = {
+        @NamedAttributeNode("tags")
+})
+@NamedEntityGraph (name = "Account.withZones", attributeNodes = {
+        @NamedAttributeNode("zones")
+})
 @Entity
 @Getter
 @Setter

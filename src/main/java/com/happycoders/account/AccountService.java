@@ -172,8 +172,10 @@ public class AccountService implements UserDetailsService {
     }
 
     public Set<Tag> getTags(Account account) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        return byId.orElseThrow().getTags();
+//        Optional<Account> byId = accountRepository.findById(account.getId());
+//        return byId.orElseThrow().getTags();
+        Account byId = accountRepository.findAccountWithTagsById(account.getId());
+        return byId.getTags();
     }
 
     public void addTag(Account account, Tag tag) {
@@ -188,8 +190,10 @@ public class AccountService implements UserDetailsService {
     }
 
     public Set<Zone> getZones(Account account) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        return byId.orElseThrow().getZones();
+//        Optional<Account> byId = accountRepository.findById(account.getId());
+//        return byId.orElseThrow().getZones();
+        Account byId = accountRepository.findAccountWithZonesById(account.getId());
+        return byId.getZones();
     }
 
     public void addZone(Account account, Zone zone) {
