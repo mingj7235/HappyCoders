@@ -92,12 +92,12 @@ public class Study {
         return this.managers.contains(userAccount.getAccount());
     }
 
-    public String getImage () {
+    public String getImage() {
         return image != null ? image : "/images/default_banner.png";
     }
 
     public void publish() {
-        if(this.closed || this.published) {
+        if (this.closed || this.published) {
             throw new RuntimeException("스터디를 공개할 수 없는 상태입니다. 이미 공개했거나 종료되었습니다.");
         }
         this.published = true;
@@ -105,10 +105,31 @@ public class Study {
     }
 
     public void close() {
-        if(this.closed || !this.published) {
+        if (this.closed || !this.published) {
             throw new RuntimeException("스터디를 종료할 수 없습니다. 이미 종료되었거나 공개중이지 않습니다.");
         }
         this.closed = true;
         this.closedDateTime = LocalDateTime.now();
     }
+
+    public void startRecruit() {
+        if (this.canUpdateRecruiting()) {
+            throw new RuntimeException("스터디 인원모집을 할 수 없습니다. 스터디를 공개하거나 한 시간 뒤 다시 시도하세요.");
+        }
+        this.recruiting = true;
+        this.recruitingUpdatedDateTime = LocalDateTime.now();
+    }
+
+    public void stopRecruit() {
+        if(this.canUpdateRecruiting()) {
+            throw new RuntimeException("스터디 인원모집을 종료할 수 없습니다. 스터디를 공개하거나 한 시간 뒤 다시 시도하세요.");
+        }
+        this.recruiting = false;
+        this.recruitingUpdatedDateTime = LocalDateTime.now();
+    }
+
+    public boolean canUpdateRecruiting() {
+        return (!this.published || this.recruitingUpdatedDateTime != null) && !this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
+    }
+
 }
