@@ -7,8 +7,8 @@ import com.happycoders.domain.Account;
 import com.happycoders.domain.Study;
 import com.happycoders.domain.Tag;
 import com.happycoders.domain.Zone;
-import com.happycoders.tag.TagForm;
 import com.happycoders.study.form.StudyDescriptionForm;
+import com.happycoders.tag.TagForm;
 import com.happycoders.tag.TagRepository;
 import com.happycoders.tag.TagService;
 import com.happycoders.zone.ZoneForm;
@@ -140,7 +140,6 @@ public class StudySettingsController {
 
     @GetMapping ("/zones")
     public String studyZonesForm (@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
-
         Study study = studyService.getStudyToUpdate(account, path);
 
         model.addAttribute(account);
@@ -156,7 +155,7 @@ public class StudySettingsController {
 
     @PostMapping ("/zones/add")
     public ResponseEntity addZone (@CurrentAccount Account account, @PathVariable String path, @RequestBody ZoneForm zoneForm) {
-        Study study = studyService.getStudyToUpdate(account, path);
+        Study study = studyService.getStudyToUpdateZone(account, path);
         Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
         if (zone == null)
             return ResponseEntity.badRequest().build();
@@ -166,7 +165,7 @@ public class StudySettingsController {
 
     @PostMapping ("/zones/remove")
     public ResponseEntity removeZone (@CurrentAccount Account account, @PathVariable String path, @RequestBody ZoneForm zoneForm) {
-        Study study = studyService.getStudyToUpdate(account, path);
+        Study study = studyService.getStudyToUpdateZone(account, path);
         Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
 
         if (zone == null)
@@ -175,6 +174,32 @@ public class StudySettingsController {
         studyService.removeZone (study, zone);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping ("/study")
+    public String studySettingForm (@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "study/settings/study";
+    }
+
+    @PostMapping ("/study/publish")
+    public String publishStudy (@CurrentAccount Account account, @PathVariable String path, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.publish(study);
+        attributes.addFlashAttribute("message", "스터디를 공개했습니다.");
+        return "redirect:/study" + getPath(path) + "/settings/study";
+    }
+
+    @PostMapping ("/study/close")
+    public String closeStudy (@CurrentAccount Account account, @PathVariable String path, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.close(study);
+        attributes.addFlashAttribute("message", "스터디를 종료했습니다.");
+        return "redirect:/study" + getPath(path) + "/settings/study";
+    }
+
+
 
     private String getPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);

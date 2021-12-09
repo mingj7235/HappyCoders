@@ -19,6 +19,8 @@ import java.util.Set;
 @NamedEntityGraph(name = "Study.withZonesAndManagers", attributeNodes = {
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
+        @NamedAttributeNode("managers")})
 @Entity
 @Getter
 @Setter
@@ -94,4 +96,19 @@ public class Study {
         return image != null ? image : "/images/default_banner.png";
     }
 
+    public void publish() {
+        if(this.closed || this.published) {
+            throw new RuntimeException("스터디를 공개할 수 없는 상태입니다. 이미 공개했거나 종료되었습니다.");
+        }
+        this.published = true;
+        this.publishedDateTime = LocalDateTime.now();
+    }
+
+    public void close() {
+        if(this.closed || !this.published) {
+            throw new RuntimeException("스터디를 종료할 수 없습니다. 이미 종료되었거나 공개중이지 않습니다.");
+        }
+        this.closed = true;
+        this.closedDateTime = LocalDateTime.now();
+    }
 }
