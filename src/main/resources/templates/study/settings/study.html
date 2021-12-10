@@ -9,21 +9,15 @@
     <div th:replace="fragments.html :: study-menu (studyMenu='settings')"></div>
     <div class="row px-3 justify-content-center">
         <div class="col-2">
-            <div th:replace="fragments.html :: study-settings-menu(currentMenu='tags')"></div>
+            <div th:replace="fragments.html :: study-settings-menu(currentMenu='study')"></div>
         </div>
         <div class="col-8">
             <div class="row">
-                <h2 class="col-sm-12">스터디 주제</h2>
+                <h2 class="col-sm-12">스터디 세팅</h2>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="alert alert-info" role="alert">
-                        스터디에서 주로 다루는 주제를 테그로 설정하세요. 테그를 입력하고 콤마(,) 또는 엔터를 입력하세요.
-                    </div>
-                    <div id="whitelist" th:text="${whitelist}" hidden>
-                    </div>
-                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
-                            class="tagify-outside" aria-describedby="tagHelp">
+
                 </div>
             </div>
         </div>
