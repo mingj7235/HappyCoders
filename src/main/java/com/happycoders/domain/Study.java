@@ -96,6 +96,12 @@ public class Study {
         return image != null ? image : "/images/default_banner.png";
     }
 
+    public static void addTagsForStudy (Study study, Tag tag) {
+        study.getTags().add(tag);
+    }
+
+
+
     public void publish() {
         if (this.closed || this.published) {
             throw new RuntimeException("스터디를 공개할 수 없는 상태입니다. 이미 공개했거나 종료되었습니다.");
