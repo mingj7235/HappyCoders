@@ -11,6 +11,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Transactional
@@ -57,19 +59,23 @@ public class StudyService {
     }
 
     public void addTag(Study study, Tag tag) {
-        study.getTags().add(tag);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.getTags().add(tag));
     }
 
     public void removeTag(Study study, Tag tag) {
-        study.getTags().remove(tag);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.getTags().remove(tag));
     }
 
     public void addZone(Study study, Zone zone) {
-        study.getZones().add(zone);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.getZones().add(zone));
     }
 
     public void removeZone(Study study, Zone zone) {
-        study.getZones().remove(zone);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.getZones().add(zone));
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
