@@ -127,6 +127,10 @@ public class StudyService {
         study.stopRecruit();
     }
 
+    public void updateStudyPath(Study study, String newPath) {
+        study.updateNewPath(newPath);
+    }
+
 }
 
 

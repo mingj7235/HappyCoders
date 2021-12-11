@@ -14,6 +14,7 @@ import com.happycoders.tag.TagService;
 import com.happycoders.zone.ZoneForm;
 import com.happycoders.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
+import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -188,7 +189,7 @@ public class StudySettingsController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.publish(study);
         attributes.addFlashAttribute("message", "스터디를 공개했습니다.");
-        return "redirect:/study" + getPath(path) + "/settings/study";
+        return "redirect:/study/" + getPath(path) + "/settings/study";
     }
 
     @PostMapping ("/study/close")
@@ -196,7 +197,7 @@ public class StudySettingsController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.close(study);
         attributes.addFlashAttribute("message", "스터디를 종료했습니다.");
-        return "redirect:/study" + getPath(path) + "/settings/study";
+        return "redirect:/study/" + getPath(path) + "/settings/study";
     }
 
     @PostMapping ("/recruit/start")
@@ -204,11 +205,11 @@ public class StudySettingsController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if(study.canUpdateRecruiting()) {
             attributes.addFlashAttribute("message", "1시간 안에 인원 모집 설정을 여러번 변경할 수 없습니다");
-            return "redirect:/study" + getPath(path) + "/settings/study";
+            return "redirect:/study/" + getPath(path) + "/settings/study";
         }
         studyService.startRecruit(study);
         attributes.addFlashAttribute("message", "스터디 인원 모집을 시작합니다.");
-        return "redirect:/study" + getPath(path) + "/settings/study";
+        return "redirect:/study/" + getPath(path) + "/settings/study";
     }
 
     @PostMapping ("/recruit/stop")
@@ -216,10 +217,18 @@ public class StudySettingsController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if(study.canUpdateRecruiting()) {
             attributes.addFlashAttribute("message", "1시간 안에 인원 모집 설정을 여러번 변경할 수 없습니다");
-            return "redirect:/study" + getPath(path) + "/settings/study";
+            return "redirect:/study/" + getPath(path) + "/settings/study";
         }
         studyService.stopRecruit(study);
         attributes.addFlashAttribute("message", "스터디 인원 모집을 종료합니다.");
+        return "redirect:/study/" + getPath(path) + "/settings/study";
+    }
+
+    @PostMapping ("/study/path")
+    public String updateStudyPath (@CurrentAccount Account account, @PathVariable String path, @RequestBody String newPath, Model model, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.updateStudyPath (study, newPath);
+        attributes.addFlashAttribute("message", "스터디의 주소가 변경되었습니다.");
         return "redirect:/study" + getPath(path) + "/settings/study";
     }
 

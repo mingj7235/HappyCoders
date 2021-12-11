@@ -132,4 +132,8 @@ public class Study {
         return (!this.published || this.recruitingUpdatedDateTime != null) && !this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
     }
 
+    public void updateNewPath(String newPath) {
+        this.setPath(newPath);
+    }
+
 }
