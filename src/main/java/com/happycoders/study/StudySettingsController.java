@@ -263,7 +263,7 @@ public class StudySettingsController {
     public String removeStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.remove(study);
-        return "redirect:/study";
+        return "redirect:/";
     }
 
     private String getPath(String path) {
