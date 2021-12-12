@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.happycoders.study.form.StudyForm.VALID_PATH_PATTERN;
+
 
 @RequiredArgsConstructor
 @Transactional
@@ -79,14 +81,14 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        Study study = studyRepository.findAccountWithTagsByPath(path);
+        Study study = studyRepository.findStudyWithTagsByPath(path);
         checkIfExistStudy(study, path);
         checkIfManger(account, study);
         return study;
     }
 
     public Study getStudyToUpdateZone (Account account, String path) {
-        Study study = studyRepository.findAccountWithZonesByPath(path);
+        Study study = studyRepository.findStudyWithZonesByPath(path);
         checkIfExistStudy(study, path);
         checkIfManger(account, study);
         return study;
@@ -129,6 +131,13 @@ public class StudyService {
 
     public void updateStudyPath(Study study, String newPath) {
         study.updateNewPath(newPath);
+    }
+
+    public boolean isValidPath(String newPath) {
+        if(!newPath.matches(VALID_PATH_PATTERN)) {
+            return false;
+        }
+        return !studyRepository.existsByPath(newPath);
     }
 
 }

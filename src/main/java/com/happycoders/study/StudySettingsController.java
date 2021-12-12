@@ -225,11 +225,17 @@ public class StudySettingsController {
     }
 
     @PostMapping ("/study/path")
-    public String updateStudyPath (@CurrentAccount Account account, @PathVariable String path, @RequestBody String newPath, Model model, RedirectAttributes attributes) {
-        Study study = studyService.getStudyToUpdate(account, path);
-        studyService.updateStudyPath (study, newPath);
-        attributes.addFlashAttribute("message", "스터디의 주소가 변경되었습니다.");
-        return "redirect:/study" + getPath(path) + "/settings/study";
+    public String updateStudyPath (@CurrentAccount Account account, @PathVariable String path, String newPath, Model model, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        if (!studyService.isValidPath(newPath)) {
+            model.addAttribute(account);
+            model.addAttribute(study);
+            model.addAttribute("studyPathError", "해당 스터디 경로는 사용할 수 없습니다. 다른 값을 입력하세요");
+        }
+
+        studyService.updateStudyPath(study, newPath);
+        attributes.addFlashAttribute("message", "스터디 경로를 수정했습니다.");
+        return "redirect:/study/" + getPath(path) + "/settings/study";
     }
 
     private String getPath(String path) {

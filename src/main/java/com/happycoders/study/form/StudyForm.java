@@ -9,6 +9,8 @@ import javax.validation.constraints.Pattern;
 @Data
 public class StudyForm {
 
+    public static final String VALID_PATH_PATTERN = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$";
+
     @NotBlank
     @Length(min = 2, max = 20)
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,20}$")
