@@ -154,7 +154,14 @@ public class StudyService {
         return newTitle.length() <= 50;
     }
 
-
+    public void remove(Study study) {
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        if (study.isRemovable()) {
+           studyRepository.delete(byId.orElseThrow(() -> new RuntimeException("스터디가 없습니다.")));
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 }
 
 

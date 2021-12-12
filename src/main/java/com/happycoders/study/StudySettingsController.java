@@ -254,6 +254,17 @@ public class StudySettingsController {
         return "redirect:/study" + getPath(path) + "/settings/study";
     }
 
+    /**
+     * soft delete를 할것인가 말것인가 고민. -> 삭제했다고 마킹만 해놓는 것
+     * https://vladmihalcea.com/the-best-way-to-soft-delete-with-hibernate/
+     * close 기능이 있기에 그냥 delete할것임
+     */
+    @PostMapping ("/study/remove")
+    public String removeStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.remove(study);
+        return "redirect:/study";
+    }
 
     private String getPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
