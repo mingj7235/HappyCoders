@@ -114,6 +114,25 @@
                 </form>
             </div>
 
+            <hr/>
+            <div class="row">
+                <h5 class="col-sm-12 text-danger">스터디 삭제</h5>
+                <form class="col-sm-12" th:action="@{'/study/' + ${study.getPath()} + '/settings/study/remove'}" method="post" novalidate>
+                    <div class="alert alert-danger" role="alert">
+                        스터디를 삭제하면 스터디 관련 모든 기록을 삭제하며 복구할 수 없습니다. <br/>
+                        <b>다음에 해당하는 스터디는 자동으로 삭제 됩니다.</b>
+                        <ul>
+                            <li>만든지 1주일이 지난 비공개 스터디</li>
+                            <li>스터디 공개 이후, 한달 동안 모임을 만들지 않은 스터디</li>
+                            <li>스터디 공개 이후, 모임을 만들지 않고 종료한 스터디</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">스터디 삭제</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
     <div th:replace="fragments.html :: footer"></div>

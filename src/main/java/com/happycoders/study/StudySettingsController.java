@@ -236,7 +236,7 @@ public class StudySettingsController {
 
         studyService.updateStudyPath(study, newPath);
         attributes.addFlashAttribute("message", "스터디 경로를 수정했습니다.");
-        return "redirect:/study/" + getPath(path) + "/settings/study";
+        return "redirect:/study/" + getPath(newPath) + "/settings/study";
     }
 
     @PostMapping ("/study/title")
@@ -253,6 +253,7 @@ public class StudySettingsController {
         attributes.addFlashAttribute("message", "스터디 이름을 수정했습니다.");
         return "redirect:/study" + getPath(path) + "/settings/study";
     }
+
 
     private String getPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);

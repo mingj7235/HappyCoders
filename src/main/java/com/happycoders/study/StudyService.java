@@ -114,23 +114,28 @@ public class StudyService {
     }
 
     public void publish(Study study) {
-        study.publish();
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(Study::publish);
     }
 
     public void close(Study study) {
-        study.close();
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(Study::close);
     }
 
     public void startRecruit(Study study) {
-        study.startRecruit();
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(Study::startRecruit);
     }
 
     public void stopRecruit(Study study) {
-        study.stopRecruit();
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(Study::stopRecruit);
     }
 
     public void updateStudyPath(Study study, String newPath) {
-        study.updateNewPath(newPath);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.updateNewPath(newPath));
     }
 
     public boolean isValidPath(String newPath) {
@@ -141,7 +146,8 @@ public class StudyService {
     }
 
     public void updateStudyTitle(Study study, String newTitle) {
-        study.setTitle(newTitle);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.setTitle(newTitle));
     }
 
     public boolean isValidTitle(String newTitle) {
