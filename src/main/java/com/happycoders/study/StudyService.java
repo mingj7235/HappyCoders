@@ -49,15 +49,18 @@ public class StudyService {
     }
 
     public void updateStudyImage(Study study, String image) {
-        study.setImage(image);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.setImage(image));
     }
 
     public void enableStudyBanner(Study study) {
-        study.setUseBanner(true);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.setUseBanner(true));
     }
 
     public void disableStudyBanner(Study study) {
-        study.setUseBanner(false);
+        Optional<Study> byId = studyRepository.findById(study.getId());
+        byId.ifPresent(s -> s.setUseBanner(false));
     }
 
     public void addTag(Study study, Tag tag) {
