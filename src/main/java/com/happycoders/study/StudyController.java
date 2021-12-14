@@ -71,6 +71,22 @@ public class StudyController {
         return "study/members";
     }
 
+    @PostMapping ("/study/{path}/join")
+    public String joinStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.joinStudy(account, path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "study/members";
+    }
+
+    @PostMapping ("/study/{path}/leave")
+    public String leaveStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.leaveStudy(account, path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "study/members";
+    }
+
 }
 
 
