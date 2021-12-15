@@ -76,7 +76,7 @@ public class StudyController {
         Study study = studyService.joinStudy(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
-        return "study/members";
+        return "redirect:/study/" + study.getPath();
     }
 
     @PostMapping ("/study/{path}/leave")
@@ -84,7 +84,7 @@ public class StudyController {
         Study study = studyService.leaveStudy(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
-        return "study/members";
+        return "redirect:/study/" + study.getPath();
     }
 
 }
