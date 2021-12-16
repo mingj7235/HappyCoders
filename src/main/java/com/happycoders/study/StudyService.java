@@ -172,6 +172,12 @@ public class StudyService {
         return study;
     }
 
+    public Study removeMember (String path, Account account) {
+        Study study = studyRepository.findByPath(path);
+        study.getMembers().remove(account);
+        return study;
+    }
+
 }
 
 

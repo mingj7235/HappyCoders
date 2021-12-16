@@ -4,6 +4,8 @@ import com.happycoders.account.UserAccount;
 import lombok.*;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -138,6 +140,10 @@ public class Study {
 
     public boolean isRemovable() {
         return !this.published; // TODO : 모임을 했던 스터디는 삭제할 수 없다.
+    }
+
+    public String getEncodedPath() {
+        return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
     }
 
 }

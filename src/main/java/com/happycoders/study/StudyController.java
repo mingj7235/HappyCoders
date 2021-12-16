@@ -79,7 +79,7 @@ public class StudyController {
 
     @PostMapping ("/study/{path}/leave")
     public String leaveStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
-        studyService.removeMember(path, account);
+        Study study = studyService.removeMember(path, account);
         return "redirect:/study" + study.getEncodedPath() + "/members";
     }
 
