@@ -24,8 +24,6 @@ import java.nio.charset.StandardCharsets;
 @Controller
 public class StudyController {
 
-    private final StudyRepository studyRepository;
-
     private final StudyService studyService;
 
     private final ModelMapper modelMapper;
