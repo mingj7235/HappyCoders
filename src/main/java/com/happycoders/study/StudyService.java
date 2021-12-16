@@ -166,18 +166,9 @@ public class StudyService {
         }
     }
 
-    public Study joinStudy(Account account, String path) {
+    public Study addMember (String path, Account account) {
         Study study = studyRepository.findByPath(path);
         study.getMembers().add(account);
-        return study;
-    }
-
-    public Study leaveStudy(Account account, String path) {
-        Study study = studyRepository.findByPath(path);
-        if(!study.getMembers().contains(account)) {
-            throw new IllegalArgumentException();
-        }
-        study.getMembers().remove(account);
         return study;
     }
 
