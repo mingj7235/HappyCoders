@@ -72,12 +72,16 @@ public class StudyController {
     @PostMapping ("/study/{path}/join")
     public String joinStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.addMember(path, account);
+        model.addAttribute(account);
+        model.addAttribute(study);
         return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 
     @PostMapping ("/study/{path}/leave")
     public String leaveStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.removeMember(path, account);
+        model.addAttribute(account);
+        model.addAttribute(study);
         return "redirect:/study" + study.getEncodedPath() + "/members";
     }
 
