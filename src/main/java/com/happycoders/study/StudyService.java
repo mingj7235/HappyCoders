@@ -167,13 +167,13 @@ public class StudyService {
     }
 
     public Study addMember (String path, Account account) {
-        Study study = studyRepository.findByPath(path);
+        Study study = studyRepository.findStudyWithManagersByPath(path);
         study.getMembers().add(account);
         return study;
     }
 
     public Study removeMember (String path, Account account) {
-        Study study = studyRepository.findByPath(path);
+        Study study = studyRepository.findStudyWithManagersByPath(path);
         study.getMembers().remove(account);
         return study;
     }

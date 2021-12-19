@@ -69,7 +69,7 @@ public class StudyController {
         return "study/members";
     }
 
-    @PostMapping ("/study/{path}/join")
+    @GetMapping ("/study/{path}/join") //TODO : post 로 변경할것
     public String joinStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.addMember(path, account);
         model.addAttribute(account);
@@ -77,12 +77,12 @@ public class StudyController {
         return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 
-    @PostMapping ("/study/{path}/leave")
+    @GetMapping  ("/study/{path}/leave") //TODO : post 로 변경할것
     public String leaveStudy (@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.removeMember(path, account);
         model.addAttribute(account);
         model.addAttribute(study);
-        return "redirect:/study" + study.getEncodedPath() + "/members";
+        return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 
 }
