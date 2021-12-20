@@ -1,4 +1,4 @@
-package com.happycoders.event;
+package com.happycoders.event.form;
 
 import com.happycoders.domain.EventType;
 import lombok.Data;
