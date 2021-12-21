@@ -10,7 +10,7 @@
     <div class="row py-4 text-left justify-content-center bg-light">
         <div class="col-6">
                 <span class="h2">
-                <a href="#" class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
+                <a class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
                     <span th:text="${study.title}">스터디 이름</span>
                 </a> / </span>
             <span class="h2" th:text="${event.title}"></span>

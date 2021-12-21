@@ -1,5 +1,6 @@
 package com.happycoders.domain;
 
+import com.happycoders.account.UserAccount;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,10 +45,43 @@ public class Event {
 
     private Integer limitOfEnrollments;
 
-    @OneToMany (mappedBy = "event")
+    @OneToMany(mappedBy = "event")
     private List<Enrollment> enrollments;
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
+
+    public boolean isEnrollableFor(UserAccount userAccount) {
+        return isNotClosed() && !isAlreadyEnrolled(userAccount);
+    }
+
+    public boolean isDisenrollableFor(UserAccount userAccount) {
+        return isNotClosed() && isAlreadyEnrolled(userAccount);
+    }
+
+    public boolean isAttended(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if(e.getAccount().equals(account) && e.isAttend()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isNotClosed() {
+        return this.endEnrollmentDateTime.isAfter(LocalDateTime.now());
+    }
+
+    private boolean isAlreadyEnrolled(UserAccount userAccount) { //TODO : REFACTOR 필요
+        Account account = userAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
