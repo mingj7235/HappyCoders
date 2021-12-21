@@ -12,7 +12,7 @@ public class EventValidator implements Validator {
 
     @Override
     public boolean supports(final Class<?> aClass) {
-        return EventValidator.class.isAssignableFrom(aClass);
+        return EventForm.class.isAssignableFrom(aClass);
     }
 
     @Override

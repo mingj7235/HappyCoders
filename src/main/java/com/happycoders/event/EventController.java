@@ -30,7 +30,7 @@ public class EventController {
 
     private final EventValidator eventValidator;
 
-    @InitBinder
+    @InitBinder("eventForm")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(eventValidator);
     }
