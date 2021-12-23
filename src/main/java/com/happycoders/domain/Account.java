@@ -98,8 +98,8 @@ public class Account {
     }
 
     public boolean canSendConfirmEmail() {
-//        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
-        return true;
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
+//        return true;
     }
 
     public boolean isManagerOf(Study study) {
