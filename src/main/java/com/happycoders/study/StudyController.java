@@ -30,6 +30,8 @@ public class StudyController {
 
     private final StudyFormValidator studyFormValidator;
 
+    private final StudyRepository studyRepository;
+
     @InitBinder("studyForm")
     public void studyFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(studyFormValidator);
@@ -55,7 +57,8 @@ public class StudyController {
 
     @GetMapping("/study/{path}")
     public String viewStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Study study = studyService.getStudy(path);
+//        Study study = studyRepository.findByPath(path);
+        Study study = studyRepository.findByPath(path);
         model.addAttribute(account);
         model.addAttribute(study);
         return "study/view";
@@ -63,7 +66,8 @@ public class StudyController {
 
     @GetMapping("/study/{path}/members")
     public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Study study = studyService.getStudy(path);
+//        Study study = studyService.getStudy(path);
+        Study study = studyRepository.findByPath(path);
         model.addAttribute(account);
         model.addAttribute(study);
         return "study/members";
