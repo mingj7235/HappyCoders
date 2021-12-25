@@ -66,7 +66,7 @@ public class Event {
     public boolean isAttended(UserAccount userAccount) {
         Account account = userAccount.getAccount();
         for (Enrollment e : this.enrollments) {
-            if(e.getAccount().equals(account) && e.isAttend()) {
+            if(e.getAccount().equals(account) && e.isAttended()) {
                 return true;
             }
         }

@@ -17,7 +17,7 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public Event createEvent(final Event event, final Study study, final Account account) {
-        event.setCreateBy(account);
+        event.setCreatedBy(account);
         event.setCreateDateTime(LocalDateTime.now());
         event.setStudy(study);
         return eventRepository.save(event);
