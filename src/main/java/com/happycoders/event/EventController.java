@@ -16,9 +16,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
-@RequestMapping ("/study/{path}")
+@RequestMapping("/study/{path}")
 @RequiredArgsConstructor
 public class EventController {
 
@@ -38,7 +39,7 @@ public class EventController {
     }
 
     @GetMapping("/new-event")
-    public String newEventForm (@CurrentAccount Account account, @PathVariable String path, Model model) {
+    public String newEventForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         model.addAttribute(study);
         model.addAttribute(account);
@@ -46,10 +47,10 @@ public class EventController {
         return "event/form";
     }
 
-    @PostMapping ("/new-event")
-    public String enwEventSubmit (@CurrentAccount Account account, @PathVariable String path, @Valid EventForm eventForm, Errors errors, Model model) {
+    @PostMapping("/new-event")
+    public String enwEventSubmit(@CurrentAccount Account account, @PathVariable String path, @Valid EventForm eventForm, Errors errors, Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             model.addAttribute(account);
             model.addAttribute(study);
             return "event/form";
@@ -60,11 +61,20 @@ public class EventController {
     }
 
     @GetMapping("/events/{id}")
-    public String getEvent (@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id, Model model) {
+    public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id, Model model) {
         model.addAttribute(account);
         model.addAttribute(eventRepository.findById(id).orElseThrow());
         model.addAttribute(studyService.getStudy(path));
         return "event/view";
+    }
+
+    @GetMapping("/events")
+    public String viewStudyEvents (@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+
+        List<Event> byStudyOrderByStartDateTime = eventRepository.findByStudyOrderByStartDateTime(study);
     }
 }
 
