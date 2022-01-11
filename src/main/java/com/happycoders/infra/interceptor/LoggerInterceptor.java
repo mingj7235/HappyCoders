@@ -18,6 +18,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
         if(log.isDebugEnabled()) {
             log.debug("debug test");
+            log.debug("tets");
         }
         return true;
     }
